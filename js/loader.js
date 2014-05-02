@@ -32,7 +32,10 @@ app.keydown = [];
 	queue.on("complete", complete, this);
 	queue.loadFile("js/lib/three.min.js");
 	queue.loadFile("js/lib/FirstPersonControls.js");
+	queue.loadFile("js/lib/tween.js");
 	queue.loadFile("js/city.js");
+	queue.loadFile("js/WindowResize.js");
+	
 	
 	function handleFileLoad(e){
 		console.log(e + " loaded");

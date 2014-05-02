@@ -33,8 +33,7 @@ app.keydown = [];
 	queue.loadFile("js/lib/three.min.js");
 	queue.loadFile("js/lib/FirstPersonControls.js");
 	queue.loadFile("js/lib/tween.js");
-	queue.loadFile("js/city.js");
-	queue.loadFile("js/WindowResize.js");
+	queue.loadFile("js/carnival.js");
 	
 	
 	function handleFileLoad(e){
@@ -42,43 +41,54 @@ app.keydown = [];
 	}
 	
 	function handleComplete(e){
-		app.city.init();
+		app.carnival.init();
 	}
 	
 	// when the loading is complete, this function will be called
-		 function complete(){
+	 function complete(){
+		
+		var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+		var FOV = 45, ASPECT = SCREEN_WIDTH/SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+		
+		// set up event handlers
+		window.onblur = function(){
+			app.paused = true;
+			cancelAnimationFrame(app.animationID);
+			app.keydown = []; // clear key daemon
+			// call update() so that our paused screen gets drawn
+			app.carnival.update();
+		};
+		
+		window.onfocus = function(){
+			app.paused = false;
+			cancelAnimationFrame(app.animationID);
+			// start the animation back up
+			app.carnival.update();
+		};
+		
+		// event listeners
+		window.addEventListener("keydown",function(e){
+			console.log("keydown=" + e.keyCode);
+			app.keydown[e.keyCode] = true;
+		});
 			
-			// set up event handlers
-			window.onblur = function(){
-				app.paused = true;
-				cancelAnimationFrame(app.animationID);
-				app.keydown = []; // clear key daemon
-				// call update() so that our paused screen gets drawn
-				app.city.update();
-			};
-			
-			window.onfocus = function(){
-				app.paused = false;
-				cancelAnimationFrame(app.animationID);
-				// start the animation back up
-				app.city.update();
-			};
-			
-			// event listeners
-			window.addEventListener("keydown",function(e){
-				console.log("keydown=" + e.keyCode);
-				app.keydown[e.keyCode] = true;
-			});
-				
-			window.addEventListener("keyup",function(e){
-				console.log("keyup=" + e.keyCode);
-				app.keydown[e.keyCode] = false;
-			});
-			
-			
-			// start game
-			app.city.init();
-		} // end complete
+		window.addEventListener("keyup",function(e){
+			console.log("keyup=" + e.keyCode);
+			app.keydown[e.keyCode] = false;
+		});
+		
+		window.addEventListener('resize',function(e)
+		{
+			app.carnival.renderer.setSize( window.innerWidth, window.innerHeight );
+			// update the camera
+			app.carnival.camera.aspect	= window.innerWidth / window.innerHeight;
+			app.carnival.camera.updateProjectionMatrix();
+		});
+		
+		
+		// start game
+		app.carnival.init(FOV,SCREEN_HEIGHT,SCREEN_WIDTH,ASPECT,NEAR,FAR);
+	} // end complete
 
 }());
 

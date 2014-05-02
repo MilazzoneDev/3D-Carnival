@@ -1,10 +1,10 @@
-// city.js
+// carnival.js
 "use strict";
 // if app exists use the existing copy
 // else create a new object literal
 var app = app || {};
 
-app.city = {
+app.carnival = {
     	// CONSTANT properties
 
 		// variable properties
@@ -16,9 +16,9 @@ app.city = {
 		dt: 1/60,
 		controls: undefined,
 
-  	init : function() {
+  	init : function(fov,height,width,aspect,near,far) {
   		console.log('init called');
-  		this.setupThreeJS();
+  		this.setupThreeJS(fov,height,width,aspect,near,far);
   		this.setupWorld();
   		this.update();
   	},
@@ -46,17 +46,17 @@ app.city = {
 
 	},
 
-	setupThreeJS: function() {
+	setupThreeJS: function(fov,height,width,aspect,near,far) {
 				this.scene = new THREE.Scene();
 				this.scene.fog = new THREE.FogExp2(0x9db3b5, 0.002);
 
-				this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 				this.camera.position.y = 400;
 				this.camera.position.z = 400;
 				this.camera.rotation.x = -45 * Math.PI / 180;
 
 				this.renderer = new THREE.WebGLRenderer({antialias: true});
-				this.renderer.setSize( window.innerWidth, window.innerHeight );
+				this.renderer.setSize( width, height );
 				this.renderer.shadowMapEnabled = true;
 				document.body.appendChild(this.renderer.domElement );
 
@@ -76,7 +76,7 @@ app.city = {
 
         // sky colors
         //this.colors.push( new THREE.Color(0x0000FF) );
-        app.skytween.init();
+        //app.skytween.init();
 
 				// build city and add to scene...
 

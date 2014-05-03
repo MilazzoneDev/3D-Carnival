@@ -75,8 +75,7 @@ app.carnival = {
 				this.scene.add(floor);
 
         // sky colors
-        //this.colors.push( new THREE.Color(0x0000FF) );
-        //app.skytween.init();
+        app.skytween.init();
 
 				// build city and add to scene...
 

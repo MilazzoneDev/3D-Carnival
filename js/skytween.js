@@ -42,5 +42,17 @@ app.skytween = {
     //console.log(c);
     var color = new THREE.Color(c.r, c.g, c.b);
     app.carnival.renderer.setClearColor(color, 1);
+  },
+
+  // Apply appropriate light intensity to a natural light source
+  getSunLightIntensity : function()
+  {
+    // RGB to Luminescence formula: Y = 0.2126 R + 0.7152 G + 0.0722 B
+    var rl = app.skytween.current.r * 0.2126;
+    var gl = app.skytween.current.g * 0.7152;
+    var bl = app.skytween.current.b * 0.0722;
+
+    var intensity = rl + gl + bl;
+    return intensity;
   }
 };

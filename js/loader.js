@@ -38,7 +38,7 @@ app.keydown = [];
 
 
 	function handleFileLoad(e){
-		console.log(e + " loaded");
+		//console.log(e + " loaded");
 	}
 
 	function handleComplete(e){

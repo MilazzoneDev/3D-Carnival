@@ -38,11 +38,11 @@ app.carnival = {
 		// UPDATE
 		this.controls.update(this.dt);
 
-    // Update sky color
-    //this.renderer.setClearColor( 0xffffff, 1);
-    TWEEN.update();
-    this.light.intensity = app.skytween.getSunLightIntensity() + 0.5;
-
+		// Update sky color
+		//this.renderer.setClearColor( 0xffffff, 1);
+		TWEEN.update();
+		this.light.intensity = app.skytween.getSunLightIntensity() + 0.5;
+		
 		// DRAW
 		this.renderer.render(this.scene, this.camera);
 

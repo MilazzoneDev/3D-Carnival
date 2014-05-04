@@ -35,6 +35,7 @@ app.keydown = [];
 	queue.loadFile("js/lib/tween.js");
 	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/skytween.js");
+	queue.loadFile("js/ferrisWheel.js");
 
 
 	function handleFileLoad(e){
@@ -69,11 +70,13 @@ app.keydown = [];
 
 		// event listeners
 		window.addEventListener("keydown",function(e){
+			e.preventDefault();
 			console.log("keydown=" + e.keyCode);
 			app.keydown[e.keyCode] = true;
 		});
 
 		window.addEventListener("keyup",function(e){
+			e.preventDefault();
 			console.log("keyup=" + e.keyCode);
 			app.keydown[e.keyCode] = false;
 		});

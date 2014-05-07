@@ -11,7 +11,8 @@ app.carnival = {
 		renderer: undefined,
 		scene: undefined,
 		camera: undefined,
-    light: undefined,
+		light: undefined,
+		ferisWheel: undefined,
 		myobjects: [],
 		paused: false,
 		dt: 1/60,
@@ -20,6 +21,7 @@ app.carnival = {
   	init : function(fov,height,width,aspect,near,far) {
   		console.log('init called');
   		this.setupThreeJS(fov,height,width,aspect,near,far);
+		app.ferrisWheel.initCamera( fov, aspect, near, far );
   		this.setupWorld();
   		this.update();
   	},
@@ -36,16 +38,26 @@ app.carnival = {
 		 }
 
 		// UPDATE
-		this.controls.update(this.dt);
 
 		// Update sky color
 		//this.renderer.setClearColor( 0xffffff, 1);
 		TWEEN.update();
 		this.light.intensity = app.skytween.getSunLightIntensity() + 0.5;
 		
+		// update ferrisWheel
+		app.ferrisWheel.Update();
+		
 		// DRAW
-		this.renderer.render(this.scene, this.camera);
-
+		if(app.ferrisWheel.active)
+		{
+			this.renderer.render(this.scene, app.ferrisWheel.camera);
+			app.ferrisWheel.controls.update(this.dt);
+		}
+		else
+		{
+			this.renderer.render(this.scene, this.camera);
+			this.controls.update(this.dt);
+		}
 	},
 
 	setupThreeJS: function(fov,height,width,aspect,near,far) {
@@ -53,9 +65,9 @@ app.carnival = {
 				//this.scene.fog = new THREE.FogExp2(0x9db3b5, 0.002);
 
 				this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-				this.camera.position.y = 400;
-				this.camera.position.z = 400;
-				this.camera.rotation.x = -45 * Math.PI / 180;
+				this.camera.position.y = 200;
+				this.camera.position.z = 0;
+				this.camera.position.x = -300;
 
 				this.renderer = new THREE.WebGLRenderer({antialias: true});
 				this.renderer.setSize( width, height );
@@ -63,15 +75,16 @@ app.carnival = {
 				document.body.appendChild(this.renderer.domElement );
 
 				this.controls = new THREE.FirstPersonControls(this.camera);
+				
 				this.controls.movementSpeed = 100;
 				this.controls.lookSpeed = 0.05;
 				this.controls.autoForward = false;
 			},
 
 	setupWorld: function() {
-				var geo = new THREE.PlaneGeometry(2000, 2000, 40, 40);
-				//var mat = new THREE.MeshPhongMaterial({color: 0x9db3b5, overdraw: true});
-
+		var geo = new THREE.PlaneGeometry(2000, 2000, 40, 40);
+		//var mat = new THREE.MeshPhongMaterial({color: 0x9db3b5, overdraw: true});
+		
         var texture = THREE.ImageUtils.loadTexture( "textures/grass.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
@@ -92,7 +105,7 @@ app.carnival = {
 
         // directional light to represent sun
         this.light = new THREE.DirectionalLight(0xf9f1c2, 1);
-        this.light.position.set(500, 1500, 1000);
+        this.light.position.set(-500, 1500, 1000);
         this.light.castShadow = true;
         this.light.shadowMapWidth = 2048;
         this.light.shadowMapHeight = 2048;
@@ -109,7 +122,12 @@ app.carnival = {
         var pointLight = new THREE.PointLight(0xf9f1c2, 1, 100);
         pointLight.position.set(1, 50, 1);
         this.scene.add(pointLight);
-			},
+		
+		//ferris wheel
+		app.ferrisWheel.init();
+		app.ferrisWheel.all.position.set(1,230,1);
+		this.scene.add(app.ferrisWheel.all);
+	},
 
 
 	drawPauseScreen: function(){

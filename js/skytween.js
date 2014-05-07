@@ -38,10 +38,13 @@ app.skytween = {
 
   doTweenUpdate : function()
   {
-    var c = app.skytween.current;
-    //console.log(c);
-    var color = new THREE.Color(c.r, c.g, c.b);
-    app.carnival.renderer.setClearColor(color, 1);
+    if(!app.pause)
+	{
+		var c = app.skytween.current;
+		//console.log(c);
+		var color = new THREE.Color(c.r, c.g, c.b);
+		app.carnival.renderer.setClearColor(color, 1);
+	}
   },
 
   // Apply appropriate light intensity to a natural light source

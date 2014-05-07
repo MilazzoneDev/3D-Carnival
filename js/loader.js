@@ -87,6 +87,12 @@ app.keydown = [];
 			// update the camera
 			app.carnival.camera.aspect	= window.innerWidth / window.innerHeight;
 			app.carnival.camera.updateProjectionMatrix();
+			
+			app.ferrisWheel.camera.aspect	= window.innerWidth / window.innerHeight;
+			app.ferrisWheel.camera.updateProjectionMatrix();
+			
+			app.carnival.controls.handleResize();
+			app.ferrisWheel.controls.handleResize();
 		});
 
 

@@ -13,6 +13,7 @@ app.carnival = {
 		camera: undefined,
 		light: undefined,
 		ferisWheel: undefined,
+		grassMan: undefined,
 		myobjects: [],
 		paused: false,
 		dt: 1/60,
@@ -127,6 +128,9 @@ app.carnival = {
 		app.ferrisWheel.init();
 		app.ferrisWheel.all.position.set(1,230,1);
 		this.scene.add(app.ferrisWheel.all);
+		
+		// obj loader
+		app.MeshLoader.loadMesh('textures/grass.jpg', 'models/male02.obj', this.grassMan);
 	},
 
 

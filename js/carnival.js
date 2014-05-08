@@ -130,7 +130,7 @@ app.carnival = {
 		this.scene.add(app.ferrisWheel.all);
 		
 		// obj loader
-		app.MeshLoader.loadMesh('textures/grass.jpg', 'models/male02.obj', this.grassMan);
+		app.MeshLoader.loadMesh('textures/grass.jpg', 'models/stand1.obj', this.grassMan);
 	},
 
 

@@ -33,13 +33,16 @@ app.MeshLoader = {
 			object.traverse( function ( child ) {
 
 				if ( child instanceof THREE.Mesh ) {
-					child.material.map = texture;
+					//child.material.map = texture;
 				}
 
 			} );
 
-			object.position.y = - 80;
+			object.position.y = 80;
 			destination = object;
+			
+			destination.scale.set(50, 50, 50);
+			
 			app.carnival.scene.add(destination);
 		} );
 	} // end function

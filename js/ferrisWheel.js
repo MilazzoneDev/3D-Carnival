@@ -13,7 +13,7 @@ app.ferrisWheel = {
 	structure: undefined,
 	lights: undefined,
 	seats: undefined,
-	Base: undefined,
+	base: undefined,
 	camera: undefined,
 	controls:undefined,
 	
@@ -66,7 +66,14 @@ app.ferrisWheel = {
 			
 		}
 		
+		var structureG = new THREE.CylinderGeometry(this.PartitionThickness,this.PartitionThickness,this.BaseWidth,32);
+		//var allM = new THREE.MeshBasicMaterial({color:0xaaaaaa});
+		var structureM= new THREE.MeshPhongMaterial({color: 0xaaaaaa, overdraw: true});
+		var structure = new THREE.Mesh(structureG,structureM);
+		this.structure.add(structure);
+		
 		//create base
+		
 		
 		//create seats
 		this.seats = new THREE.Object3D();
@@ -76,17 +83,14 @@ app.ferrisWheel = {
 		}
 		
 		
-		//create the base
-		var allG = new THREE.CylinderGeometry(this.PartitionThickness,this.PartitionThickness,this.BaseWidth,32);
-		//var allM = new THREE.MeshBasicMaterial({color:0xaaaaaa});
-		var allM = new THREE.MeshPhongMaterial({color: 0xaaaaaa, overdraw: true});
-		this.all = new THREE.Mesh(allG,allM);
-		
 		//stand up the ferrisWheel
-		this.all.rotation = new THREE.Euler( 0, 0, Math.PI/2, 'XYZ' );
+		this.structure.rotation = new THREE.Euler( 0, 0, Math.PI/2, 'XYZ' );
 		
-		//add structure and seats to all
+		
+		//add structure and seats to wheel
+		this.all = new THREE.Object3D();
 		this.all.add(this.structure);
+		this.all.add(this.base);
 		this.all.add(this.camera);
 		
 	},
@@ -107,12 +111,12 @@ app.ferrisWheel = {
 		
 		if(this.active)
 		{
-			this.structure.rotation.y += 0.001;
+			this.structure.rotation.x += 0.001;
 			
 			//this.controls.object.rotation.z+=Math.PI/2;
 			
-			this.camera.position.x = -( (this.PartitionLength)*(Math.cos(this.structure.rotation.y)));
-			this.camera.position.z = ( (this.PartitionLength)*(Math.sin(this.structure.rotation.y)));
+			this.camera.position.y = this.structure.position.x -( (this.PartitionLength)*(Math.cos(this.structure.rotation.x)));
+			this.camera.position.z = this.structure.position.z -( (this.PartitionLength)*(Math.sin(this.structure.rotation.x)));
 			
 		}
 	}

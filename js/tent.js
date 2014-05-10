@@ -2,51 +2,36 @@
 var app = app || {};
 
 // using:
-// https://cdn.tutsplus.com/psd/uploads/legacy/0495_Wood_Textures/03-free-wood-textures.jpg
-// 
-app.FoodStand = {
+// http://www.turbosquid.com/3d-models/tent-max-free/660727
+app.Tent = {
 
 	mesh: undefined,
 
 	load: function(texURL, meshURL)
 	{
-		// texture
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
 		};
 
-		var texture = new THREE.Texture();
-
-		var loader = new THREE.ImageLoader( manager );
-		loader.load( texURL, function ( image ) {
-
-			texture.image = image;
-			texture.needsUpdate = true;
-
-		} );
-
-		// model
 		var loader = new THREE.OBJLoader( manager );
 		loader.load( meshURL, function ( object ) {
 
 			object.traverse( function ( child ) {
 
 				if ( child instanceof THREE.Mesh ) {
-					child.material.map = texture;
+					child.material = new THREE.MeshPhongMaterial({color: 0xA89441});
 				}
-
 			} );
 
-			//object.material.map = texture;
-
-			object.position.y = 15;
-			object.position.x = -300;
+			object.rotation.x= -Math.PI/2;
+			object.rotation.z= -Math.PI/4;
+			object.position.y = -15;
+			object.position.x = 200;
 			object.position.z = -500;
-			object.scale.set(20, 20, 20);
-			app.FoodStand.mesh = object;
+			app.Tent.mesh = object;
 
-			app.carnival.scene.add(app.FoodStand.mesh);
+			app.carnival.scene.add(app.Tent.mesh);
 		} );
 	}, // end function
 

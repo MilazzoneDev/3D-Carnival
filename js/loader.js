@@ -36,6 +36,7 @@ app.keydown = [];
 	queue.loadFile("js/lib/tween.js");
 	queue.loadFile("js/foodStand.js");
 	queue.loadFile("js/gameStand.js");
+	queue.loadFile("js/tent.js");
 	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/skytween.js");
 	queue.loadFile("js/ferrisWheel.js");

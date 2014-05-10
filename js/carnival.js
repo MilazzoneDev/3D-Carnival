@@ -135,10 +135,9 @@ app.carnival = {
 		this.scene.add(app.ferrisWheel.all);
 
 		// obj loader
-    // (Asset sources: https://cdn.tutsplus.com/psd/uploads/legacy/0495_Wood_Textures/03-free-wood-textures.jpg,
-    // ,  , , , , )
-		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj', this.grassMan);
-    app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj', this.grassMan);
+		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');
+    app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj');
+    app.Tent.load('textures/tent.jpg', 'models/tent2.obj');
 	},
 
 

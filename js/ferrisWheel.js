@@ -5,10 +5,11 @@ var app = app || {};
 app.ferrisWheel = {
 
 	angle: 0,
+	speed: 0.001,
 	Partitions: 15,
 	PartitionLength: 200,
 	PartitionThickness:20,
-	BaseWidth: 45,
+	BaseWidth: 50,
 	all:undefined,
 	structure: undefined,
 	lights: undefined,
@@ -30,13 +31,18 @@ app.ferrisWheel = {
 		this.controls.autoForward = false;
 	},
 	
-	init : function()
+	init : function(speed)
 	{	
+		if(speed)
+		{
+			this.speed = speed;
+		}
+		
 		//create structure
 		this.structure = new THREE.Object3D();
 		for(var i = 0; i< this.Partitions;i++)
 		{
-			var newAngle = (Math.PI*2/this.Partitions)*i;
+			var newAngle = (Math.PI*2/this.Partitions)*(i+0.5) ;
 			
 			for(var j = -1; j < 2; j=j+2)
 			{
@@ -86,7 +92,7 @@ app.ferrisWheel = {
 		this.seats = new THREE.Object3D();
 		for(var i = 0; i< this.Partitions;i++)
 		{
-			var newAngle = (Math.PI*2/this.Partitions)*i;
+			var newAngle = (Math.PI*2/this.Partitions)*(i+0.5);
 				
 				var structureG = new THREE.CubeGeometry(this.BaseWidth/2,this.BaseWidth-this.PartitionThickness,this.BaseWidth/2);
 				//var structureM = new THREE.MeshBasicMaterial({color:0xaaffaa});
@@ -116,12 +122,14 @@ app.ferrisWheel = {
 
 	Update : function()
 	{
+		if(this.structure.rotation.x > Math.PI*2)
+		{
+			this.resetWheel();
+			console.log(this.structure.rotation.x);
+		}
 		if(app.keydown[72] && !this.keydown)
 		{
-			this.active = !this.active;
-			//this.controls.object.rotation = new THREE.Euler( Math.PI/2, 0, 0, 'XYZ' );
-			this.camera.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2);
-			this.controls.lon = 90;
+			this.resetWheel();
 		}
 		if(app.keydown[72] != this.keydown)
 		{
@@ -130,21 +138,38 @@ app.ferrisWheel = {
 		
 		if(this.active)
 		{
-			this.structure.rotation.x += 0.001;
+			this.structure.rotation.x += this.speed;
 			
-			this.seats.rotation.x += 0.001;
+			this.seats.rotation.x += this.speed;
 			
 			var seatChildren = this.seats.children;
 			for(var k = 0; k < seatChildren.length; k++)
 			{
-				seatChildren[k].rotation.y+=0.001;
+				seatChildren[k].rotation.y+=this.speed;
 			}
 			
 			//this.controls.object.rotation.z+=Math.PI/2;
 			
 			this.camera.position.y = this.structure.position.x -( (this.PartitionLength)*(Math.cos(this.structure.rotation.x)));
-			this.camera.position.z = this.structure.position.z -( (this.PartitionLength)*(Math.sin(this.structure.rotation.x)));
+			this.camera.position.z = this.structure.position.z -( (this.PartitionLength)*(Math.sin(this.structure.rotation.x)))-10;
 			
+		}
+	},
+	
+	resetWheel : function()
+	{
+		this.active = !this.active;
+		//this.controls.object.rotation = new THREE.Euler( Math.PI/2, 0, 0, 'XYZ' );
+		this.camera.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2);
+		this.controls.lon = 270;
+		this.controls.lat = 0;
+		
+		this.structure.rotation.x = 0;
+		this.seats.rotation.x = 0;
+		var seatChildren = this.seats.children;
+		for(var k = 0; k < seatChildren.length; k++)
+		{
+			seatChildren[k].rotation.y= 0;
 		}
 	}
 };

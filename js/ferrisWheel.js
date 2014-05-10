@@ -26,7 +26,7 @@ app.ferrisWheel = {
 		this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 		this.controls = new THREE.FirstPersonControls(this.camera);
 		this.controls.movementSpeed = 0;
-		this.controls.lookSpeed = 0.05;
+		this.controls.lookSpeed = 0.2;
 		this.controls.autoForward = false;
 	},
 	
@@ -53,14 +53,21 @@ app.ferrisWheel = {
 				var lookAt = new THREE.Vector3(0,0,0);
 				structure.lookAt(lookAt);
 				
-				//structure.rotation = new THREE.Euler( 0, 0, Math.PI/2, 'XYZ' );
 				structure.rotateOnAxis(new THREE.Vector3(0,0,1),Math.PI/2);
 				structure.rotateOnAxis(new THREE.Vector3(1,0,0),Math.PI/2);
 				
 				structure.position.y = j*this.BaseWidth/2 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
 				
+				var sphereG = new THREE.SphereGeometry( this.PartitionThickness/4, 32, 32 );
+				var sphere = new THREE.Mesh( sphereG, structureM );
+				sphere.position.x = ( (this.PartitionLength)*(Math.cos(newAngle)));
+				sphere.position.z = ( (this.PartitionLength)*(Math.sin(newAngle)));
+				sphere.lookAt(lookAt);
+				sphere.position.y = j*this.BaseWidth/2 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
+				
 				
 				this.structure.add(structure);
+				this.structure.add(sphere);
 			}
 			
 			
@@ -79,18 +86,30 @@ app.ferrisWheel = {
 		this.seats = new THREE.Object3D();
 		for(var i = 0; i< this.Partitions;i++)
 		{
-			
+			var newAngle = (Math.PI*2/this.Partitions)*i;
+				
+				var structureG = new THREE.CubeGeometry(this.BaseWidth/2,this.BaseWidth-this.PartitionThickness,this.BaseWidth/2);
+				//var structureM = new THREE.MeshBasicMaterial({color:0xaaffaa});
+				var structureM = new THREE.MeshPhongMaterial({color: 0x9db3b5, overdraw: true});
+				var seat = new THREE.Mesh(structureG,structureM)
+				
+				
+				seat.position.x = ( (this.PartitionLength)*(Math.cos(newAngle)));
+				seat.position.z = ( (this.PartitionLength)*(Math.sin(newAngle)));
+				
+				this.seats.add(seat);
 		}
 		
 		
 		//stand up the ferrisWheel
 		this.structure.rotation = new THREE.Euler( 0, 0, Math.PI/2, 'XYZ' );
-		
+		this.seats.rotation = new THREE.Euler(0,0,Math.PI/2,'XYZ');
 		
 		//add structure and seats to wheel
 		this.all = new THREE.Object3D();
 		this.all.add(this.structure);
 		this.all.add(this.base);
+		this.all.add(this.seats);
 		this.all.add(this.camera);
 		
 	},
@@ -112,6 +131,14 @@ app.ferrisWheel = {
 		if(this.active)
 		{
 			this.structure.rotation.x += 0.001;
+			
+			this.seats.rotation.x += 0.001;
+			
+			var seatChildren = this.seats.children;
+			for(var k = 0; k < seatChildren.length; k++)
+			{
+				seatChildren[k].rotation.y+=0.001;
+			}
 			
 			//this.controls.object.rotation.z+=Math.PI/2;
 			

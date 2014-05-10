@@ -118,21 +118,14 @@ app.carnival = {
         this.light.shadowCameraTop = d;
         this.light.shadowCameraBottom = -d;
         this.light.shadowCameraFar = 2500;
+        //this.light.castShadow = true;
         this.scene.add(this.light);
 
         var pointLight = new THREE.PointLight(0xf9f1c2, 1, 100);
         pointLight.position.set(1, 50, 1);
         this.scene.add(pointLight);
 
-        var cubeG = new THREE.CubeGeometry(100,100,100);
-  			var cubeM = new THREE.MeshPhongMaterial({color: 0xff0000});
-  			var cube = new THREE.Mesh(cubeG, cubeM);
-        cube.material.opacity = 0.3;
-        cube.material.transparent = true;
-        cube.position.set(1, 50, 1);
-        this.scene.add(cube);
-
-        var ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
+        var ambientLight = new THREE.AmbientLight( 0x303030 ); // soft white light
         ambientLight.intensity = 0.1;
         this.scene.add( ambientLight );
 
@@ -145,7 +138,7 @@ app.carnival = {
     // (Asset sources: https://cdn.tutsplus.com/psd/uploads/legacy/0495_Wood_Textures/03-free-wood-textures.jpg,
     // ,  , , , , )
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj', this.grassMan);
-    app.GameStand.load('textures/foodstand.jpg', 'models/stand2.obj', this.grassMan);
+    app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj', this.grassMan);
 	},
 
 

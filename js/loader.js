@@ -34,7 +34,7 @@ app.keydown = [];
 	queue.loadFile("js/lib/FirstPersonControls.js");
 	queue.loadFile("js/lib/OBJLoader.js");
 	queue.loadFile("js/lib/tween.js");
-	queue.loadFile("js/meshLoader.js");
+	queue.loadFile("js/foodStand.js");
 	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/skytween.js");
 	queue.loadFile("js/ferrisWheel.js");
@@ -89,10 +89,10 @@ app.keydown = [];
 			// update the camera
 			app.carnival.camera.aspect	= window.innerWidth / window.innerHeight;
 			app.carnival.camera.updateProjectionMatrix();
-			
+
 			app.ferrisWheel.camera.aspect	= window.innerWidth / window.innerHeight;
 			app.ferrisWheel.camera.updateProjectionMatrix();
-			
+
 			app.carnival.controls.handleResize();
 			app.ferrisWheel.controls.handleResize();
 		});

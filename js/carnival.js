@@ -44,10 +44,10 @@ app.carnival = {
 		//this.renderer.setClearColor( 0xffffff, 1);
 		TWEEN.update();
 		this.light.intensity = app.skytween.getSunLightIntensity() + 0.5;
-		
+
 		// update ferrisWheel
 		app.ferrisWheel.Update();
-		
+
 		// DRAW
 		if(app.ferrisWheel.active)
 		{
@@ -76,7 +76,7 @@ app.carnival = {
 				document.body.appendChild(this.renderer.domElement );
 
 				this.controls = new THREE.FirstPersonControls(this.camera);
-				
+
 				this.controls.movementSpeed = 100;
 				this.controls.lookSpeed = 0.05;
 				this.controls.autoForward = false;
@@ -85,7 +85,7 @@ app.carnival = {
 	setupWorld: function() {
 		var geo = new THREE.PlaneGeometry(2000, 2000, 40, 40);
 		//var mat = new THREE.MeshPhongMaterial({color: 0x9db3b5, overdraw: true});
-		
+
         var texture = THREE.ImageUtils.loadTexture( "textures/grass.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
@@ -123,14 +123,14 @@ app.carnival = {
         var pointLight = new THREE.PointLight(0xf9f1c2, 1, 100);
         pointLight.position.set(1, 50, 1);
         this.scene.add(pointLight);
-		
+
 		//ferris wheel
 		app.ferrisWheel.init();
 		app.ferrisWheel.all.position.set(1,230,1);
 		this.scene.add(app.ferrisWheel.all);
-		
+
 		// obj loader
-		app.MeshLoader.loadMesh('textures/grass.jpg', 'models/stand1.obj', this.grassMan);
+		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj', this.grassMan);
 	},
 
 

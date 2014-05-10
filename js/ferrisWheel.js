@@ -26,7 +26,7 @@ app.ferrisWheel = {
 		this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 		this.controls = new THREE.FirstPersonControls(this.camera);
 		this.controls.movementSpeed = 0;
-		this.controls.lookSpeed = 0.2;
+		this.controls.lookSpeed = 0.18;
 		this.controls.autoForward = false;
 	},
 	

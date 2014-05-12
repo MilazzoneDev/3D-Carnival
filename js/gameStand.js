@@ -4,6 +4,9 @@ var app = app || {};
 app.GameStand = {
 
 	mesh: undefined,
+	items: [],
+	rows: 2,
+	cols: 6,
 
 	load: function(texURL, meshURL)
 	{
@@ -45,6 +48,38 @@ app.GameStand = {
 
 			app.carnival.scene.add(app.GameStand.mesh);
 		} );
+		
+		// load eggplants and caramels on the shelves
+		for(var i=0; i<this.rows; i++)
+		{
+			for(var j=0; j<this.cols; j++)
+			{
+				// randomize whether it's an eggplant or caramel
+				var rand = app.utilities.getRandom(0, 1);
+				
+				if(rand > 0.5)
+				{
+					// Caramel
+					
+				} else
+				{
+					// Eggplant
+					var itemGeo = new THREE.SphereGeometry( 5, 32, 32 );
+					var itemMat = new THREE.MeshPhongMaterial({color: 0xaa00ff, overdraw: true});
+					var itemMesh = new THREE.Mesh(itemGeo, itemMat);
+					
+					itemMesh.position.y = 46 - 20 * i;
+					itemMesh.position.x = -538 + 15 * j;
+					itemMesh.position.z = -510;
+						
+					//items.addObject(itemMesh);
+					app.carnival.scene.add(itemMesh);
+				}
+			}
+		}
+		
+		
+		
 	}, // end function
 
 /*

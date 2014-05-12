@@ -40,6 +40,7 @@ app.keydown = [];
 	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/skytween.js");
 	queue.loadFile("js/ferrisWheel.js");
+	queue.loadFile("js/utilities.js");
 
 
 	function handleFileLoad(e){

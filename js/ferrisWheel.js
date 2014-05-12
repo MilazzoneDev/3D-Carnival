@@ -5,7 +5,7 @@ var app = app || {};
 app.ferrisWheel = {
 
 	angle: 0,
-	speed: 0.001,
+	speed: 0.003,
 	Partitions: 15,
 	PartitionLength: 200,
 	PartitionThickness:20,

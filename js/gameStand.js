@@ -3,6 +3,7 @@ var app = app || {};
 
 app.GameStand = {
 
+	object: undefined,
 	mesh: undefined,
 	items: [],
 	rows: 2,
@@ -34,6 +35,7 @@ app.GameStand = {
 
 				if ( child instanceof THREE.Mesh ) {
 					child.material.map = texture;
+					app.GameStand.mesh = child;
 				}
 
 			} );
@@ -44,11 +46,11 @@ app.GameStand = {
 			object.position.x = -500;
 			object.position.z = -500;
 			object.scale.set(20, 20, 20);
-			app.GameStand.mesh = object;
+			app.GameStand.object = object;
 
-			app.carnival.scene.add(app.GameStand.mesh);
+			app.carnival.scene.add(app.GameStand.object);
 		} );
-		
+
 		// load eggplants and caramels on the shelves
 		for(var i=0; i<this.rows; i++)
 		{
@@ -56,30 +58,35 @@ app.GameStand = {
 			{
 				// randomize whether it's an eggplant or caramel
 				var rand = app.utilities.getRandom(0, 1);
-				
+
+				var itemGeo;
+				var itemMat;
+
 				if(rand > 0.5)
 				{
 					// Caramel
-					
-				} else
-				{
+					itemGeo = new THREE.CubeGeometry(6, 10, 5);
+					itemMat = new THREE.MeshPhongMaterial({color: 0xFFDB66, overdraw: true});
+
+				} else {
 					// Eggplant
-					var itemGeo = new THREE.SphereGeometry( 5, 32, 32 );
-					var itemMat = new THREE.MeshPhongMaterial({color: 0xaa00ff, overdraw: true});
-					var itemMesh = new THREE.Mesh(itemGeo, itemMat);
-					
-					itemMesh.position.y = 46 - 20 * i;
-					itemMesh.position.x = -538 + 15 * j;
-					itemMesh.position.z = -510;
-						
-					//items.addObject(itemMesh);
-					app.carnival.scene.add(itemMesh);
+					itemGeo = new THREE.SphereGeometry( 5, 32, 32 );
+					itemMat = new THREE.MeshPhongMaterial({color: 0xaa00ff, overdraw: true});
 				}
+
+				var itemMesh = new THREE.Mesh(itemGeo, itemMat);
+
+				itemMesh.position.y = 46 - 18 * i;
+				itemMesh.position.x = -538 + 15 * j;
+				itemMesh.position.z = -510;
+
+				//items.addObject(itemMesh);
+				app.carnival.scene.add(itemMesh);
 			}
 		}
-		
-		
-		
+
+
+
 	}, // end function
 
 /*

@@ -13,7 +13,6 @@ app.carnival = {
 		camera: undefined,
 		light: undefined,
 		ferisWheel: undefined,
-		grassMan: undefined,
 		myobjects: [],
 		paused: false,
 		dt: 1/60,
@@ -22,7 +21,7 @@ app.carnival = {
   	init : function(fov,height,width,aspect,near,far) {
   		console.log('init called');
   		this.setupThreeJS(fov,height,width,aspect,near,far);
-		app.ferrisWheel.initCamera( fov, aspect, near, far );
+      app.ferrisWheel.initCamera( fov, aspect, near, far );
   		this.setupWorld();
   		this.update();
   	},
@@ -126,7 +125,7 @@ app.carnival = {
         this.scene.add(pointLight);
 
         var ambientLight = new THREE.AmbientLight( 0x303030 ); // soft white light
-        ambientLight.intensity = 0.1;
+        ambientLight.intensity = 0.01;
         this.scene.add( ambientLight );
 
 		//ferris wheel
@@ -138,8 +137,46 @@ app.carnival = {
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');
     app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj');
     app.Tent.load('textures/tent.jpg', 'models/tent2.obj');
+
 	},
 
+  doRaycast: function(event) {
+    event.preventDefault();
+    var projector = new THREE.Projector();
+
+    // 2D point where we clicked on the screen
+    var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) *
+    2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+    console.log("Vector is x=" + vector.x + ",y=" + vector.y + ",z=" +
+    vector.z);
+
+    // 2D point converted to 3D point in world
+    projector.unprojectVector(vector, this.camera);
+    console.log("Unprojected Vector x=" + vector.x + ",y=" + vector.y +
+    ",z=" + vector.z);
+
+    // cast a ray from the camera to the 3D point we clicked on
+    var raycaster = new THREE.Raycaster(this.camera.position,
+    vector.sub(this.camera.position).normalize());
+
+    // an array of objects we are checking for intersections
+    // you’ll need to put your own objects here
+    var intersects = raycaster.intersectObjects([app.GameStand.mesh]);
+
+    if (intersects.length > 0) {
+      intersects[ 0 ].object.material.transparent = true;
+      intersects[ 0 ].object.material.opacity = 0.3;
+
+      //intersects[0].object.scale.multiplyScalar(1.1);
+
+      // debug info
+      console.log("distance=" + intersects[0].distance);
+      console.log("point.x=" + intersects[0].point.x);
+      console.log("point.y=" + intersects[0].point.y);
+      console.log("face=" + intersects[0].face);
+      console.log("faceIndex=" + intersects[0].faceIndex);
+    }
+  },
 
 	drawPauseScreen: function(){
 		// do something pause-like if you want

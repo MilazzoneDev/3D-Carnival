@@ -5,7 +5,8 @@ var app = app || {};
 // http://www.turbosquid.com/3d-models/tent-max-free/660727
 app.Tent = {
 
-	mesh: undefined,
+	object: undefined,
+	meshes: [],
 
 	load: function(texURL, meshURL)
 	{
@@ -21,6 +22,7 @@ app.Tent = {
 
 				if ( child instanceof THREE.Mesh ) {
 					child.material = new THREE.MeshPhongMaterial({color: 0xA89441});
+					app.Tent.meshes.push(child);
 				}
 			} );
 
@@ -29,9 +31,9 @@ app.Tent = {
 			object.position.y = -15;
 			object.position.x = 200;
 			object.position.z = -500;
-			app.Tent.mesh = object;
+			app.Tent.object = object;
 
-			app.carnival.scene.add(app.Tent.mesh);
+			app.carnival.scene.add(app.Tent.object);
 		} );
 	}, // end function
 

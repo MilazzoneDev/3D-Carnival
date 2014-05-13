@@ -100,6 +100,11 @@ app.keydown = [];
 			app.ferrisWheel.controls.handleResize();
 		});
 
+		document.addEventListener("mousedown",function(e)
+		{
+			app.carnival.doRaycast(e);
+		}, false);
+
 
 		// start game
 		app.carnival.init(FOV,SCREEN_HEIGHT,SCREEN_WIDTH,ASPECT,NEAR,FAR);

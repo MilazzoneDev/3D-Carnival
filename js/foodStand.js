@@ -3,9 +3,10 @@ var app = app || {};
 
 // using:
 // https://cdn.tutsplus.com/psd/uploads/legacy/0495_Wood_Textures/03-free-wood-textures.jpg
-// 
+//
 app.FoodStand = {
 
+	object: undefined,
 	mesh: undefined,
 
 	load: function(texURL, meshURL)
@@ -34,19 +35,18 @@ app.FoodStand = {
 
 				if ( child instanceof THREE.Mesh ) {
 					child.material.map = texture;
+					app.FoodStand.mesh = child;
 				}
 
 			} );
-
-			//object.material.map = texture;
 
 			object.position.y = 15;
 			object.position.x = -300;
 			object.position.z = -500;
 			object.scale.set(20, 20, 20);
-			app.FoodStand.mesh = object;
+			app.FoodStand.object = object;
 
-			app.carnival.scene.add(app.FoodStand.mesh);
+			app.carnival.scene.add(app.FoodStand.object);
 		} );
 	}, // end function
 

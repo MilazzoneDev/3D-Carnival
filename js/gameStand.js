@@ -5,6 +5,13 @@ app.GameStand = {
 
 	object: undefined,
 	mesh: undefined,
+
+	camera: undefined,
+	active: undefined,
+
+	ball: undefined,
+	isBallActive: false,
+
 	items: [],
 	rows: 2,
 	cols: 6,
@@ -51,6 +58,40 @@ app.GameStand = {
 			app.carnival.scene.add(app.GameStand.object);
 		} );
 
+		// init other parts of the game stand
+		this.initBall();
+		this.initItems();
+
+	}, // end function
+
+	// gets called from app.carnival
+	initCamera: function(fov, aspect, near, far ){
+		//create camera
+		this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+		this.controls = new THREE.FirstPersonControls(this.camera);
+		this.controls.movementSpeed = 0;
+		this.controls.lookSpeed = 0.18;
+		this.controls.autoForward = false;
+
+		this.camera.position.y = 35;
+		this.camera.position.x = -500;
+		this.camera.position.z = -400;
+	},
+
+	initBall: function(){
+		// load the ball and hide it
+		var ballGeo = new THREE.SphereGeometry( 5, 32, 32 );
+		var ballMat = new THREE.MeshPhongMaterial({color: 0xff0000, overdraw: true});
+		this.ball = new THREE.Mesh(ballGeo, ballMat);
+		this.ball.position.y = 30;
+		this.ball.position.x = -480;
+		this.ball.position.z = -450;
+		this.ball.material.transparent = true;
+		this.ball.material.opacity = 0.0;
+		app.carnival.scene.add(this.ball);
+	},
+
+	initItems: function(){
 		// load eggplants and caramels on the shelves
 		for(var i=0; i<this.rows; i++)
 		{
@@ -80,24 +121,65 @@ app.GameStand = {
 				itemMesh.position.x = -538 + 15 * j;
 				itemMesh.position.z = -510;
 
-				//items.addObject(itemMesh);
+				this.items.push(itemMesh);
 				app.carnival.scene.add(itemMesh);
 			}
 		}
+	},
 
+	doRaycast: function(raycaster) {
 
+		// an array of objects we are checking for intersections
+		// you’ll need to put your own objects here
+		var array = this.items;
+		array.push(this.mesh);
+		var intersects = raycaster.intersectObjects(array);
 
-	}, // end function
+		if (intersects.length > 0) {
+			// Player clicked on game stand
+			if(intersects[0].object == this.mesh)
+			{
+				// Toss ball at items
+				if(this.active)
+				{
+					this.tossBall();
+				}
+				// Begin game
+				else
+				{
+					this.active = true;
+					app.ferrisWheel.active = false;
+					this.ball.material.opacity = 1.0;
+				}
+			}
+			// Player clicked on an item
+			else
+			{
+				intersects[0].object.material.transparent = true;
+				intersects[0].object.material.opacity = 0.3;
+			}
+		}
+		// Player clicks away from active game
+		else if(this.active)
+		{
+			this.active = false;
+			this.ball.material.opacity = 0.0;
+		}
+	},
 
-/*
+	tossBall: function()
+	{
+		// Set the ball to start going
+		this.isBallActive = true;
+	},
+
 	update: function()
 	{
-		if(this.mesh)
+		// If ball is in action, update its motion
+		if(this.isBallActive)
 		{
-			this.mesh.position.x++;
+			this.ball.position.z--;
 		}
-
 	}
-	*/
 
 };

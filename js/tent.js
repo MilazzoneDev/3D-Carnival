@@ -35,7 +35,7 @@ app.Tent = {
 
 			app.carnival.scene.add(app.Tent.object);
 		} );
-	}, // end function
+	} // end function
 
 /*
 	update: function()

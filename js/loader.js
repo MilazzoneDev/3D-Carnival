@@ -96,6 +96,9 @@ app.keydown = [];
 			app.ferrisWheel.camera.aspect	= window.innerWidth / window.innerHeight;
 			app.ferrisWheel.camera.updateProjectionMatrix();
 
+			app.GameStand.camera.aspect = window.innerWidth / window.innerHeight;
+			app.GameStand.camera.updateProjectionMatrix();
+
 			app.carnival.controls.handleResize();
 			app.ferrisWheel.controls.handleResize();
 		});

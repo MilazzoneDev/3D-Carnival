@@ -22,6 +22,7 @@ app.carnival = {
   		console.log('init called');
   		this.setupThreeJS(fov,height,width,aspect,near,far);
       app.ferrisWheel.initCamera( fov, aspect, near, far );
+      app.GameStand.initCamera(fov, aspect, near, far);
   		this.setupWorld();
   		this.update();
   	},
@@ -47,12 +48,20 @@ app.carnival = {
 		// update ferrisWheel
 		app.ferrisWheel.Update();
 
+    // update game stand
+    app.GameStand.update();
+
 		// DRAW
 		if(app.ferrisWheel.active)
 		{
 			this.renderer.render(this.scene, app.ferrisWheel.camera);
 			app.ferrisWheel.controls.update(this.dt);
 		}
+    else if(app.GameStand.active)
+    {
+      this.renderer.render(this.scene, app.GameStand.camera);
+      //app.ferrisWheel.controls.update(this.dt);
+    }
 		else
 		{
 			this.renderer.render(this.scene, this.camera);
@@ -144,38 +153,61 @@ app.carnival = {
     event.preventDefault();
     var projector = new THREE.Projector();
 
+    // Define the camera to use for raycasts
+    var currentCam = this.camera;
+    if(app.ferrisWheel.active)
+    {
+      currentCam = app.ferrisWheel.camera;
+    } else if(app.GameStand.active) {
+      currentCam = app.GameStand.camera;
+    }
+
     // 2D point where we clicked on the screen
     var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) *
     2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
-    console.log("Vector is x=" + vector.x + ",y=" + vector.y + ",z=" +
-    vector.z);
+    //console.log("Vector is x=" + vector.x + ",y=" + vector.y + ",z=" + vector.z);
 
     // 2D point converted to 3D point in world
-    projector.unprojectVector(vector, this.camera);
-    console.log("Unprojected Vector x=" + vector.x + ",y=" + vector.y +
-    ",z=" + vector.z);
+    projector.unprojectVector(vector, currentCam);
+    //console.log("Unprojected Vector x=" + vector.x + ",y=" + vector.y +",z=" + vector.z);
 
     // cast a ray from the camera to the 3D point we clicked on
-    var raycaster = new THREE.Raycaster(this.camera.position,
-    vector.sub(this.camera.position).normalize());
+    var raycaster = new THREE.Raycaster(currentCam.position,
+    vector.sub(currentCam.position).normalize());
+
+    app.GameStand.doRaycast(raycaster);
 
     // an array of objects we are checking for intersections
     // you’ll need to put your own objects here
     var intersects = raycaster.intersectObjects([app.GameStand.mesh]);
 
+
+/*
+    // See if the player clicked on the stand
     if (intersects.length > 0) {
-      intersects[ 0 ].object.material.transparent = true;
-      intersects[ 0 ].object.material.opacity = 0.3;
 
-      //intersects[0].object.scale.multiplyScalar(1.1);
+      // if the player DID click on the Game Stand...
+      if(intersects[0].object == app.GameStand.mesh)
+      {
+        // If playing mini game, toss ball
+        if(app.GameStand.active)
+        {
+          app.GameStand.tossBall();
+        }
+        // Otherwise, start playing
+        else
+        {
+          app.GameStand.active = true;
+          app.ferrisWheel.active = false;
+        }
+      }
+      // if the player clicked away from the game stand
+      else
+      {
 
-      // debug info
-      console.log("distance=" + intersects[0].distance);
-      console.log("point.x=" + intersects[0].point.x);
-      console.log("point.y=" + intersects[0].point.y);
-      console.log("face=" + intersects[0].face);
-      console.log("faceIndex=" + intersects[0].faceIndex);
+      }
     }
+    */
   },
 
 	drawPauseScreen: function(){

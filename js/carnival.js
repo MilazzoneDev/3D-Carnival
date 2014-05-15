@@ -145,8 +145,8 @@ app.carnival = {
 		// obj loader
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');
     app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj');
-    app.Tent.load('textures/tent.jpg', 'models/tent2.obj');
-
+    app.Tent.load(null, 'models/tent2.obj');
+    app.Tent.loadPizza('textures/pizza.jpg', 'models/pizza_box_v01.obj')
 	},
 
   doRaycast: function(event) {

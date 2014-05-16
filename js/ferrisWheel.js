@@ -13,10 +13,15 @@ app.ferrisWheel = {
 	BaseAngle: Math.PI/5,
 	BaseLengthModifier: 9/8,
 	LightChanger: 0,
-	LightChanger2: 0,
+	LightChanger2: 20,
+	LightTime: 20,
+	LightEffect:0,
+	MaxLightsover2: 5,
+	LightMatOn: undefined,
+	LightMatOff: undefined,
 	all:undefined,
 	structure: undefined,
-	lights: undefined,
+	lights: [],
 	seats: undefined,
 	base: undefined,
 	camera: undefined,
@@ -41,7 +46,10 @@ app.ferrisWheel = {
 		{
 			this.speed = speed;
 		}
-		this.lights = [];
+		
+		//init light materials
+		this.LightMatOff = new THREE.MeshBasicMaterial( {color: 0x888800} );
+		this.LightMatOn = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 
 		//create structure
 		this.structure = new THREE.Object3D();
@@ -70,21 +78,20 @@ app.ferrisWheel = {
 				structure.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
 				
 				//add lights to radial bars
-				var dist = this.PartitionLength/10;
-				for(var k = -3; k < 3;k++)
+				var dist = this.PartitionLength/(this.MaxLightsover2*2);
+				for(var k = -this.MaxLightsover2; k < this.MaxLightsover2;k++)
 				{
 					//var light = new THREE.PointLight( 0xffff00, 1, 10 );
 					//var boxm = new THREE.MeshPhongMaterial({color: 0xff0000, overdraw: true});
 					//var boxg = new THREE.BoxGeometry(10,10,10);
-					//light = new THREE.Mesh(boxg,boxm);
 					//this.lights.push(light);
 					//light.position.set( j*5,0,0 );
 					var geometry = new THREE.SphereGeometry( 2, 32, 32 );
-					var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+					var material = this.LightMatOff;
 					var sphere = new THREE.Mesh( geometry, material );
+					sphere.name = k;
 					structure.add(sphere);
 					sphere.position.set( j*5,k*dist,0 );
-					console.log(sphere.position.y);
 					this.lights.push(sphere);
 				}	
 				
@@ -208,10 +215,9 @@ app.ferrisWheel = {
 		this.all.add(this.base);
 		this.all.add(this.seats);
 		this.all.add(this.camera);
-
 	},
 
-	Update : function()
+	Update : function(light)
 	{
 		if(this.structure.rotation.x > Math.PI*2)
 		{
@@ -246,26 +252,40 @@ app.ferrisWheel = {
 
 		}
 		
-		//move lights
-		var dist = this.PartitionLength/6;
-		
-		this.LightChanger2++;
-		if(this.LightChanger2 > 50)
+		if(light < 0.85)
 		{
-			this.LightChanger2 = 0;
-			this.LightChanger++;
-			if(this.LightChanger > 6)
+			//move lights
+			
+			this.LightChanger2++;
+			
+			if(this.LightChanger2 > this.LightTime)
 			{
-				this.LightChanger = 0;
-			}
-			for(var i = 0; i < this.lights.count; i++)
-			{
-				//var structureChildren = this.structure.children;
-				
-				//.position.y = dist*this.LightChanger;
+				this.LightChanger2 = 0;
+				this.LightChanger--;
+				if(this.LightChanger < -this.MaxLightsover2)
+				{
+					this.LightChanger = this.MaxLightsover2-1;
+				}
+				for(var i = 0; i < this.lights.length; i++)
+				{
+					if(this.LightEffect == 0)
+					{
+						if(this.lights[i].name == this.LightChanger)
+						{
+							this.lights[i].material = this.LightMatOn;
+						}
+						else
+						{
+							this.lights[i].material = this.LightMatOff;
+						}
+					}
+					else
+					{
+						
+					}
+				}
 			}
 		}
-		//console.log(this.lights[0].position.y);
 		
 	},
 

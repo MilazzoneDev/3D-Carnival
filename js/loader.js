@@ -33,7 +33,9 @@ app.keydown = [];
 	queue.loadFile("js/lib/three.min.js");
 	queue.loadFile("js/lib/FirstPersonControls.js");
 	queue.loadFile("js/lib/OBJLoader.js");
+	queue.loadFile("js/lib/jquery-1.9.0.js");
 	queue.loadFile("js/lib/tween.js");
+	queue.loadFile("js/lib/stats.js");
 	queue.loadFile("js/foodStand.js");
 	queue.loadFile("js/gameStand.js");
 	queue.loadFile("js/tent.js");
@@ -50,13 +52,30 @@ app.keydown = [];
 	function handleComplete(e){
 		app.carnival.init();
 	}
+	
+	function initStats() {
+
+		var stats = new Stats();
+
+		stats.setMode(0); // 0: fps, 1: ms
+
+		// Align top-left
+		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.left = '0px';
+		stats.domElement.style.top = '0px';
+
+		$("#Stats-output").append( stats.domElement );
+
+		return stats;
+	}
 
 	// when the loading is complete, this function will be called
 	 function complete(){
 
 		var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 		var FOV = 45, ASPECT = SCREEN_WIDTH/SCREEN_HEIGHT, NEAR = 0.1, FAR = 5000;
-
+		app.stats = initStats();
+		
 		// set up event handlers
 		window.onblur = function(){
 			app.paused = true;
@@ -76,13 +95,13 @@ app.keydown = [];
 		// event listeners
 		window.addEventListener("keydown",function(e){
 			e.preventDefault();
-			console.log("keydown=" + e.keyCode);
+			//console.log("keydown=" + e.keyCode);
 			app.keydown[e.keyCode] = true;
 		});
 
 		window.addEventListener("keyup",function(e){
 			e.preventDefault();
-			console.log("keyup=" + e.keyCode);
+			//console.log("keyup=" + e.keyCode);
 			app.keydown[e.keyCode] = false;
 		});
 
@@ -107,7 +126,7 @@ app.keydown = [];
 		{
 			app.carnival.doRaycast(e);
 		}, false);
-
+		
 
 		// start game
 		app.carnival.init(FOV,SCREEN_HEIGHT,SCREEN_WIDTH,ASPECT,NEAR,FAR);

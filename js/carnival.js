@@ -30,6 +30,7 @@ app.carnival = {
 
     update: function(){
     	// schedule next animation frame
+		app.stats.update();
     	app.animationID = requestAnimationFrame(this.update.bind(this));
 
 		// PAUSED?
@@ -46,7 +47,7 @@ app.carnival = {
 		this.light.intensity = app.skytween.getSunLightIntensity() + 0.5;
 
 		// update ferrisWheel
-		app.ferrisWheel.Update();
+		app.ferrisWheel.Update(this.light.intensity);
 
     // update game stand
     app.GameStand.update();

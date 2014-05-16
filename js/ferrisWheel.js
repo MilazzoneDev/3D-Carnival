@@ -286,6 +286,13 @@ app.ferrisWheel = {
 				}
 			}
 		}
+		else if(light < 0.87)
+		{
+			for(var i = 0; i < this.lights.length; i++)
+			{
+				this.lights[i].material = this.LightMatOff;
+			}
+		}
 		
 	},
 

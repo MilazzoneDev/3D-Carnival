@@ -55,7 +55,7 @@ app.keydown = [];
 	 function complete(){
 
 		var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-		var FOV = 45, ASPECT = SCREEN_WIDTH/SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+		var FOV = 45, ASPECT = SCREEN_WIDTH/SCREEN_HEIGHT, NEAR = 0.1, FAR = 5000;
 
 		// set up event handlers
 		window.onblur = function(){

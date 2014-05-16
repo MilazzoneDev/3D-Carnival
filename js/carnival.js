@@ -139,7 +139,7 @@ app.carnival = {
 
 		//ferris wheel
 		app.ferrisWheel.init();
-		app.ferrisWheel.all.position.set(1,230,1);
+		app.ferrisWheel.all.position.set(1,app.ferrisWheel.PartitionLength*app.ferrisWheel.BaseLengthModifier,1);
 		this.scene.add(app.ferrisWheel.all);
 
 		// obj loader

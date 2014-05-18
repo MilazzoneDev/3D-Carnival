@@ -188,6 +188,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 	this.update = function( delta ) {
 
+        debugger;
 		if ( this.freeze ) {
 
 			return;
@@ -230,6 +231,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		if ( this.constrainVertical ) {
 
+            debugger;
 			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
 
 		}

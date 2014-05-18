@@ -142,12 +142,17 @@ app.carnival = {
 		app.ferrisWheel.init();
 		app.ferrisWheel.all.position.set(1,app.ferrisWheel.PartitionLength*app.ferrisWheel.BaseLengthModifier,1);
 		this.scene.add(app.ferrisWheel.all);
-
+		
 		// obj loader
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');
-    app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj');
-    app.Tent.load(null, 'models/tent2.obj');
-    app.Tent.loadPizza('textures/pizza.jpg', 'models/pizza_box_v01.obj')
+        app.GameStand.load('textures/gamestand.jpg', 'models/stand2.obj');
+        app.Tent.load(null, 'models/tent2.obj');
+        app.Tent.loadPizza('textures/pizza.jpg', 'models/pizza_box_v01.obj');
+    
+        for(var i=0; i<10; i++)
+        {
+            app.BackgroundTents.load(null, 'models/tent2.obj');
+        }
 	},
 
   doRaycast: function(event) {
@@ -177,6 +182,7 @@ app.carnival = {
     vector.sub(currentCam.position).normalize());
 
     app.GameStand.doRaycast(raycaster);
+    app.FoodStand.doRaycast(raycaster);
 
     // an array of objects we are checking for intersections
     // you’ll need to put your own objects here

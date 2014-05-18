@@ -231,6 +231,12 @@ app.carnival = {
 
 	drawPauseScreen: function(){
 		// do something pause-like if you want
+	},
+	
+	startSoundtrack: function()
+	{
+		createjs.Sound.stop();
+		createjs.Sound.play("soundtrack", {loop:-1, volume:0.5});
 	}
 
 

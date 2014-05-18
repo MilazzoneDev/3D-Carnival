@@ -82,6 +82,7 @@ app.keydown = [];
 			app.paused = true;
 			cancelAnimationFrame(app.animationID);
 			app.keydown = []; // clear key daemon
+			createjs.Sound.stop(); // stop music
 			// call update() so that our paused screen gets drawn
 			app.carnival.update();
 		};
@@ -89,6 +90,7 @@ app.keydown = [];
 		window.onfocus = function(){
 			app.paused = false;
 			cancelAnimationFrame(app.animationID);
+			app.carnival.startSoundtrack(); // start soundtrack
 			// start the animation back up
 			app.carnival.update();
 		};
@@ -128,6 +130,17 @@ app.keydown = [];
 			app.carnival.doRaycast(e);
 		}, false);
 		
+		// load sounds with soundjs
+		createjs.Sound.alternateExtensions = ["mp3"];
+		createjs.Sound.registerSound({id:"soundtrack", src:"sounds/bgmusic.ogg"}); // incompetech.com
+		createjs.Sound.registerSound({id:"whoosh", src:"sounds/whoosh.ogg"}); // soundbible.com
+		
+		createjs.Sound.addEventListener("fileload", handleFileLoad);
+		function handleFileLoad(e)
+		{
+			console.log("Preloaded Sound", e.id, e.src);
+			if(e.id == "soundtrack") app.carnival.startSoundtrack();
+		}
 
 		// start game
 		app.carnival.init(FOV,SCREEN_HEIGHT,SCREEN_WIDTH,ASPECT,NEAR,FAR);

@@ -172,6 +172,7 @@ app.GameStand = {
 	{
 		// Set the ball to start going
 		this.isBallActive = true;
+		createjs.Sound.play("whoosh", {loop:0, volume:1.0});
 	},
 
 	update: function()

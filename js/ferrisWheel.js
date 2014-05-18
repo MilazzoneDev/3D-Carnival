@@ -54,9 +54,8 @@ app.ferrisWheel = {
 		//create structure
 		this.structure = new THREE.Object3D();
 		
-		var radialBars = new THREE.Geometry();
+		var greyBars = new THREE.Geometry();
 		var innerBars = new THREE.Geometry();
-		var outerBars = new THREE.Geometry();
 		for(var i = 0; i< this.Partitions;i++)
 		{
 			var newAngle = (Math.PI*2/this.Partitions)*(i+0.5);
@@ -85,23 +84,22 @@ app.ferrisWheel = {
 				var dist = this.PartitionLength/(this.MaxLightsover2*2);
 				for(var k = -this.MaxLightsover2; k < this.MaxLightsover2;k++)
 				{
-					//var light = new THREE.PointLight( 0xffff00, 1, 10 );
-					//var boxm = new THREE.MeshPhongMaterial({color: 0xff0000, overdraw: true});
-					//var boxg = new THREE.BoxGeometry(10,10,10);
-					//this.lights.push(light);
-					//light.position.set( j*5,0,0 );
+					var curDist = this.PartitionLength/2 + (dist*(k+1));
+					
 					var geometry = new THREE.SphereGeometry( 2, 32, 32 );
 					var material = this.LightMatOff;
 					var sphere = new THREE.Mesh( geometry, material );
 					sphere.name = k;
-					structure.add(sphere);
-					sphere.position.set( j*5,k*dist,0 );
+				
+					sphere.position.set(((curDist)*(Math.cos(newAngle))),0,(curDist)*(Math.sin(newAngle)));
+					
+					sphere.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/3 + j*this.PartitionThickness/20) + j*5;
 					this.structure.add(sphere);
 					this.lights.push(sphere);
 				}	
 				
 				
-				THREE.GeometryUtils.merge(radialBars,structure);
+				THREE.GeometryUtils.merge(greyBars,structure);
 				//end radial bars
 
 				//inner bars
@@ -132,24 +130,21 @@ app.ferrisWheel = {
 
 				structure3.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
 				
-				THREE.GeometryUtils.merge(outerBars,structure3);
+				THREE.GeometryUtils.merge(greyBars,structure3);
 				//end outer bars
 			}
 
 
 		}
-		var M1 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
+		var M1 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true, shininess: 30});
 		var M2 = new THREE.MeshPhongMaterial({color: 0x44bbff, overdraw: true});
-		var M3 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true, shininess: 30});
 		
-		var radialBarsMesh = new THREE.Mesh(radialBars,M1);
+		var radialBarsMesh = new THREE.Mesh(greyBars,M1);
 		var innerBarsMesh = new THREE.Mesh(innerBars,M2);
-		var outerBarsMesh = new THREE.Mesh(outerBars,M3);
 		
 		//add all to structure
 		this.structure.add(radialBarsMesh);
 		this.structure.add(innerBarsMesh);
-		this.structure.add(outerBarsMesh);
 
 		var structureG = new THREE.CylinderGeometry(this.PartitionThickness,this.PartitionThickness,this.BaseWidth,32);
 		//var allM = new THREE.MeshBasicMaterial({color:0xaaaaaa});
@@ -159,34 +154,35 @@ app.ferrisWheel = {
 
 		//create base
 		this.base = new THREE.Object3D();
+		var base = new THREE.Geometry();
+		var baseM = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
 		for(var i = -1; i < 2; i= i+2)
 		{
 			for(var j = -1; j < 2; j= j+2)
 			{
 				var lookAt = new THREE.Vector3(0,0,0);
 				var length = (this.PartitionLength*this.BaseLengthModifier)/Math.cos(this.BaseAngle);
-				//console.log("ferrisWheel.y should be "+this.PartitionLength*this.BaseLengthModifier);
-				//console.log("length "+length);
-				//var length = this.PartitionLength*this.BaseLengthModifier;
+				
 				var baseG = new THREE.CylinderGeometry(this.PartitionThickness/3,this.PartitionThickness/3,length,32);
-				var baseM = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
-				var baseBar = new THREE.Mesh(baseG,baseM)
-
+				var baseBar = new THREE.Mesh(baseG);
+				
 				baseBar.position.x = ( (length/2)*(Math.cos(this.BaseAngle*i+Math.PI)));
 				baseBar.position.z = ( (length/2)*(Math.sin(this.BaseAngle*i+Math.PI)));
 				
 				baseBar.lookAt(lookAt);
-
+				
 				baseBar.rotateOnAxis(new THREE.Vector3(0,0,1),Math.PI/2);
 				baseBar.rotateOnAxis(new THREE.Vector3(1,0,0),Math.PI/2);
 
 				baseBar.position.y = j * this.BaseWidth/2 - (j * this.PartitionThickness/3 + j*this.PartitionThickness/20);
 				
-				this.base.add(baseBar);
+				THREE.GeometryUtils.merge(base,baseBar);
 			}
 			
 		}
-
+		var fullbase = new THREE.Mesh(base,baseM);
+		this.base.add(fullbase);
+		
 		//create seats
 		this.seats = new THREE.Object3D();
 		for(var i = 0; i< this.Partitions;i++)

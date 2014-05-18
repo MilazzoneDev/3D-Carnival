@@ -53,22 +53,26 @@ app.ferrisWheel = {
 
 		//create structure
 		this.structure = new THREE.Object3D();
+		
+		var radialBars = new THREE.Geometry();
+		var innerBars = new THREE.Geometry();
+		var outerBars = new THREE.Geometry();
 		for(var i = 0; i< this.Partitions;i++)
 		{
 			var newAngle = (Math.PI*2/this.Partitions)*(i+0.5);
 			var newAngle2 = (Math.PI*2/this.Partitions)*(i);
-
+			
 			for(var j = -1; j < 2; j=j+2)
 			{
 				var lookAt = new THREE.Vector3(0,0,0);
 				//radial bars
 				var structureG = new THREE.CylinderGeometry(this.PartitionThickness/4,this.PartitionThickness/4,this.PartitionLength,32);
-				var structureM = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
-				var structure = new THREE.Mesh(structureG,structureM)
+				
+				var structure = new THREE.Mesh(structureG);
 
 				structure.position.x = ( (this.PartitionLength/2)*(Math.cos(newAngle)));
 				structure.position.z = ( (this.PartitionLength/2)*(Math.sin(newAngle)));
-
+				
 				structure.lookAt(lookAt);
 
 
@@ -92,16 +96,17 @@ app.ferrisWheel = {
 					sphere.name = k;
 					structure.add(sphere);
 					sphere.position.set( j*5,k*dist,0 );
+					this.structure.add(sphere);
 					this.lights.push(sphere);
 				}	
 				
+				
+				THREE.GeometryUtils.merge(radialBars,structure);
 				//end radial bars
 
 				//inner bars
 				var structureG2 = new THREE.CylinderGeometry(this.PartitionThickness/4,this.PartitionThickness/4,((this.PartitionLength*Math.PI)/this.Partitions)*3.45,32);
-				//var structureM = new THREE.MeshBasicMaterial({color:0xaaffaa});
-				var structureM2 = new THREE.MeshPhongMaterial({color: 0x44bbff, overdraw: true});
-				var structure2 = new THREE.Mesh(structureG2,structureM2)
+				var structure2 = new THREE.Mesh(structureG2);
 
 				structure2.position.x = ( (this.PartitionLength/2)*(Math.cos(newAngle2)));
 				structure2.position.z = ( (this.PartitionLength/2)*(Math.sin(newAngle2)));
@@ -111,12 +116,12 @@ app.ferrisWheel = {
 				structure2.rotateOnAxis(new THREE.Vector3(0,0,1),Math.PI/2);
 
 				structure2.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
+				
+				THREE.GeometryUtils.merge(innerBars,structure2);
 				//end inner bars
 				//outer bars
 				var structureG3 = new THREE.CylinderGeometry(this.PartitionThickness/4,this.PartitionThickness/4,((this.PartitionLength*Math.PI*2)/this.Partitions),32);
-				var structureM3 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true, shininess: 30});
-				//var structureM3 = new THREE.ParticleSystemMaterial({color: 0x9db3b5});
-				var structure3 = new THREE.Mesh(structureG3,structureM3)
+				var structure3 = new THREE.Mesh(structureG3);
 
 				structure3.position.x = ( (this.PartitionLength-this.PartitionThickness/4)*(Math.cos(newAngle2)));
 				structure3.position.z = ( (this.PartitionLength-this.PartitionThickness/4)*(Math.sin(newAngle2)));
@@ -126,28 +131,25 @@ app.ferrisWheel = {
 				structure3.rotateOnAxis(new THREE.Vector3(0,0,1),Math.PI/2);
 
 				structure3.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
-
-
+				
+				THREE.GeometryUtils.merge(outerBars,structure3);
 				//end outer bars
-
-				//sphere caps
-				var sphereG = new THREE.SphereGeometry( this.PartitionThickness/4, 32, 32 );
-				var sphere = new THREE.Mesh( sphereG, structureM );
-				sphere.position.x = ( (this.PartitionLength)*(Math.cos(newAngle)));
-				sphere.position.z = ( (this.PartitionLength)*(Math.sin(newAngle)));
-				sphere.lookAt(lookAt);
-				sphere.position.y = j*this.BaseWidth/3 - (j*this.PartitionThickness/4 + j*this.PartitionThickness/20);
-				//end sphere caps
-
-				//add all to structure
-				this.structure.add(structure);
-				this.structure.add(structure2);
-				this.structure.add(structure3);
-				this.structure.add(sphere);
 			}
 
 
 		}
+		var M1 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
+		var M2 = new THREE.MeshPhongMaterial({color: 0x44bbff, overdraw: true});
+		var M3 = new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true, shininess: 30});
+		
+		var radialBarsMesh = new THREE.Mesh(radialBars,M1);
+		var innerBarsMesh = new THREE.Mesh(innerBars,M2);
+		var outerBarsMesh = new THREE.Mesh(outerBars,M3);
+		
+		//add all to structure
+		this.structure.add(radialBarsMesh);
+		this.structure.add(innerBarsMesh);
+		this.structure.add(outerBarsMesh);
 
 		var structureG = new THREE.CylinderGeometry(this.PartitionThickness,this.PartitionThickness,this.BaseWidth,32);
 		//var allM = new THREE.MeshBasicMaterial({color:0xaaaaaa});

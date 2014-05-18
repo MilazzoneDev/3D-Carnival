@@ -55,15 +55,13 @@ app.carnival = {
     	// update corn dog
     	if(app.FoodStand.foodObjectActive)
     	{
-    	/*
-    		app.FoodStand.foodObject.position.x = this.camera.position.x + 500;
-    		app.FoodStand.foodObject.position.y = this.camera.position.y + 10;
-    		app.FoodStand.foodObject.position.z = this.camera.position.z + 500;
-    		*/
-    		
-    		app.FoodStand.foodObject.position.x = this.camera.position.x - 10;
-    		app.FoodStand.foodObject.position.y = this.camera.position.y;
-    		app.FoodStand.foodObject.position.z = this.camera.position.z - 10;
+			app.FoodStand.foodObject.scale.x = 0.3;
+			app.FoodStand.foodObject.scale.y = 0.3;
+			app.FoodStand.foodObject.scale.z = 0.3;
+			
+			app.FoodStand.foodObject.position.x = this.camera.position.x + ( (10)*(Math.cos((this.controls.lon+30)*(Math.PI/180))));
+			app.FoodStand.foodObject.position.z = this.camera.position.z + ( (10)*(Math.sin((this.controls.lon+30)*(Math.PI/180))));
+    		app.FoodStand.foodObject.position.y = this.camera.position.y - 5;
     	}
 
 		// DRAW
@@ -155,7 +153,7 @@ app.carnival = {
 		//ferris wheel
 		app.ferrisWheel.init();
 		app.ferrisWheel.all.position.set(1,app.ferrisWheel.PartitionLength*app.ferrisWheel.BaseLengthModifier,1);
-		//this.scene.add(app.ferrisWheel.all);
+		this.scene.add(app.ferrisWheel.all);
 		
 		// obj loader
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');

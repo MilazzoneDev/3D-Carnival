@@ -21,8 +21,8 @@ app.carnival = {
   	init : function(fov,height,width,aspect,near,far) {
   		console.log('init called');
   		this.setupThreeJS(fov,height,width,aspect,near,far);
-      app.ferrisWheel.initCamera( fov, aspect, near, far );
-      app.GameStand.initCamera(fov, aspect, near, far);
+     	app.ferrisWheel.initCamera( fov, aspect, near, far );
+     	app.GameStand.initCamera(fov, aspect, near, far);
   		this.setupWorld();
   		this.update();
   	},
@@ -49,8 +49,22 @@ app.carnival = {
 		// update ferrisWheel
 		app.ferrisWheel.Update(this.light.intensity);
 
-    // update game stand
-    app.GameStand.update();
+    	// update game stand
+    	app.GameStand.update();
+    	
+    	// update corn dog
+    	if(app.FoodStand.foodObjectActive)
+    	{
+    	/*
+    		app.FoodStand.foodObject.position.x = this.camera.position.x + 500;
+    		app.FoodStand.foodObject.position.y = this.camera.position.y + 10;
+    		app.FoodStand.foodObject.position.z = this.camera.position.z + 500;
+    		*/
+    		
+    		app.FoodStand.foodObject.position.x = this.camera.position.x - 10;
+    		app.FoodStand.foodObject.position.y = this.camera.position.y;
+    		app.FoodStand.foodObject.position.z = this.camera.position.z - 10;
+    	}
 
 		// DRAW
 		if(app.ferrisWheel.active)
@@ -87,7 +101,7 @@ app.carnival = {
 				this.controls = new THREE.FirstPersonControls(this.camera);
 
 				this.controls.movementSpeed = 100;
-				this.controls.lookSpeed = 0.05;
+				this.controls.lookSpeed = 0.2;
 				this.controls.autoForward = false;
 			},
 
@@ -141,7 +155,7 @@ app.carnival = {
 		//ferris wheel
 		app.ferrisWheel.init();
 		app.ferrisWheel.all.position.set(1,app.ferrisWheel.PartitionLength*app.ferrisWheel.BaseLengthModifier,1);
-		this.scene.add(app.ferrisWheel.all);
+		//this.scene.add(app.ferrisWheel.all);
 		
 		// obj loader
 		app.FoodStand.load('textures/foodstand.jpg', 'models/stand1.obj');
@@ -151,7 +165,7 @@ app.carnival = {
     
         for(var i=0; i<10; i++)
         {
-            app.BackgroundTents.load(null, 'models/tent2.obj');
+            //app.BackgroundTents.load(null, 'models/tent2.obj');
         }
 	},
 

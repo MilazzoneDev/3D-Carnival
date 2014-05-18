@@ -59,43 +59,64 @@ app.FoodStand = {
 	
 	makeFoodItems: function()
 	{
-	    var stickGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.3);
+	    var stickGeo = new THREE.CylinderGeometry(0.5, 0.5, 6);
 	    var stickMat = new THREE.MeshPhongMaterial({color: 0xBB8F00});
 	    var stick = new THREE.Mesh(stickGeo, stickMat);
 	
-	    this.object.add(stick);
-	    stick.position.x = 0.5;
-	    stick.position.y = 0.5;
-	    stick.position.z = 1.5;
+	    stick.position.x = this.object.position.x + 10;
+	    stick.position.y = this.object.position.y + 10;
+	    stick.position.z = this.object.position.z + 30;
 	    
 	    var cornDogMat = new THREE.MeshPhongMaterial({color: 0xBA7600});
-	    var sphereGeo = new THREE.SphereGeometry(0.1);
+	    
+	    
+	    var cylinderGeo = new THREE.CylinderGeometry(2, 2, 5);
+	    var cylinder = new THREE.Mesh(cylinderGeo, cornDogMat);
+	    
+	    
+	    var sphereGeo = new THREE.SphereGeometry(2);
 	    var sphere1 = new THREE.Mesh(sphereGeo, cornDogMat);
 	    var sphere2 = new THREE.Mesh(sphereGeo, cornDogMat);
 	    
-	    stick.add(sphere1);
-	    stick.add(sphere2);
-	    sphere1.position.y = 0.5;
-	    sphere2.position.y = 0.25;
+	    cylinder.add(sphere1);
+	    cylinder.add(sphere2);
 	    
-	    var cylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.25);
-	    var cylinder = new THREE.Mesh(cylinderGeo, cornDogMat);
+	    sphere1.position.y= cylinder.geometry.height/2;
+	    sphere2.position.y= -cylinder.geometry.height/2;
 	    
 	    stick.add(cylinder);
-	    cylinder.position.y = 0.4;
+	    cylinder.position.y = 7;
 	    
 	    this.foodObject = stick;
+	    
+	    /*
+	    this.foodMeshes.push(stick);
+	    this.foodMeshes.push(sphere1);
+	    this.foodMeshes.push(sphere2);
+	    this.foodMeshes.push(cylinder);
+	    */
+	    app.carnival.scene.add(stick);
+	    
 	},
 	
 	
 	doRaycast: function(raycaster) {
-		var intersects = raycaster.intersectObjects([this.foodObject]);
+		
+		var array = [];
+		var children = this.foodObject.children;
+		array.push(children[0]);
+		array.push(children[0].children[0]);
+		array.push(children[0].children[1]);
+		array.push(this.foodObject);
+		
+		var intersects = raycaster.intersectObjects(array);
 
 		if (intersects.length > 0) {
 			// Player clicked on corn dog
-			if(intersects[0].object == this.foodObject && !this.foodObjectActive)
+			if(!this.foodObjectActive)
 			{
 				console.log("take corn dog");
+				this.foodObjectActive = true;
 			}
 		}
 	},

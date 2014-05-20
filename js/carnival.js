@@ -14,6 +14,7 @@ app.carnival = {
 		light: undefined,
 		ferisWheel: undefined,
 		myobjects: [],
+		myavatars: [],
 		paused: false,
 		dt: 1/60,
 		controls: undefined,
@@ -51,6 +52,12 @@ app.carnival = {
 
     	// update game stand
     	app.GameStand.update();
+		
+		// update avatars
+		for(var i=0; i<this.myavatars.length; i++)
+		{
+			this.myavatars[i].move();
+		}
     	
     	// update corn dog
     	if(app.FoodStand.foodObjectActive)
@@ -62,6 +69,21 @@ app.carnival = {
 			app.FoodStand.foodObject.position.x = this.camera.position.x + ( (10)*(Math.cos((this.controls.lon+30)*(Math.PI/180))));
 			app.FoodStand.foodObject.position.z = this.camera.position.z + ( (10)*(Math.sin((this.controls.lon+30)*(Math.PI/180))));
     		app.FoodStand.foodObject.position.y = this.camera.position.y - 5;
+			
+			// this isn't working????
+			if(app.ferrisWheel.active || app.GameStand.active)
+			{
+				app.FoodStand.foodObject.scale.x = 1.0;
+				app.FoodStand.foodObject.scale.y = 1.0;
+				app.FoodStand.foodObject.scale.z = 1.0;
+				
+				var pos = app.FoodStand.object.position
+				
+				app.FoodStand.foodObject.position.x = pos.x + 10;
+				app.FoodStand.foodObject.position.z = pos.y + 10;
+				app.FoodStand.foodObject.position.y = pos.z + 30;
+			}
+			
     	}
 
 		// DRAW
@@ -70,11 +92,11 @@ app.carnival = {
 			this.renderer.render(this.scene, app.ferrisWheel.camera);
 			app.ferrisWheel.controls.update(this.dt);
 		}
-    else if(app.GameStand.active)
-    {
-      this.renderer.render(this.scene, app.GameStand.camera);
-      //app.ferrisWheel.controls.update(this.dt);
-    }
+		else if(app.GameStand.active)
+		{
+		  this.renderer.render(this.scene, app.GameStand.camera);
+		  //app.ferrisWheel.controls.update(this.dt);
+		}
 		else
 		{
 			this.renderer.render(this.scene, this.camera);
@@ -163,7 +185,14 @@ app.carnival = {
     
         for(var i=0; i<10; i++)
         {
-            //app.BackgroundTents.load(null, 'models/tent2.obj');
+            app.BackgroundTents.load(null, 'models/tent2.obj');
+        }
+		
+		// people avatars
+		for(var i=0; i<10; i++)
+        {
+            this.myavatars[i] = new app.Avatar();
+			this.scene.add(this.myavatars[i].mesh);
         }
 	},
 

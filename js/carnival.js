@@ -13,8 +13,9 @@ app.carnival = {
 		camera: undefined,
 		light: undefined,
 		ferisWheel: undefined,
-		myobjects: [],
+		//myobjects: [],
 		myavatars: [],
+		mytrees: [],
 		paused: false,
 		dt: 1/60,
 		controls: undefined,
@@ -193,6 +194,13 @@ app.carnival = {
         {
             this.myavatars[i] = new app.Avatar();
 			this.scene.add(this.myavatars[i].mesh);
+        }
+        
+        // trees
+        for(var i=0; i<10; i++)
+        {
+            this.mytrees[i] = new app.Tree();
+			this.scene.add(this.mytrees[i].mesh);
         }
 	},
 

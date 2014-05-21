@@ -30,20 +30,29 @@ app.keydown = [];
 	var queue = new createjs.LoadQueue(false);
 	queue.on("fileload", handleFileLoad, this);
 	queue.on("complete", complete, this);
+	
+	// libraries
 	queue.loadFile("js/lib/three.min.js");
 	queue.loadFile("js/lib/FirstPersonControls.js");
 	queue.loadFile("js/lib/OBJLoader.js");
 	queue.loadFile("js/lib/jquery-1.9.0.js");
 	queue.loadFile("js/lib/tween.js");
 	queue.loadFile("js/lib/stats.js");
+	
+	// function constructor classes
+	queue.loadFile("js/avatar.js");
+	queue.loadFile("js/tree.js");
+	
+	// object literal classes
 	queue.loadFile("js/foodStand.js");
 	queue.loadFile("js/gameStand.js");
 	queue.loadFile("js/backgroundTents.js");
 	queue.loadFile("js/tent.js");
-	queue.loadFile("js/avatar.js");
-	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/skytween.js");
 	queue.loadFile("js/ferrisWheel.js");
+	
+	// main class and utilities
+	queue.loadFile("js/carnival.js");
 	queue.loadFile("js/utilities.js");
 
 

@@ -73,7 +73,7 @@ app.Tent = {
 
 			object.rotation.x= Math.PI/2;
 			object.rotation.y= -Math.PI;
-			object.position.z = 50;
+			object.position.z = 46;
 			object.position.x = 40;
 
 			app.Tent.pizzaObject = object;

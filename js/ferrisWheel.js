@@ -344,7 +344,8 @@ app.ferrisWheel = {
 		}
 		
 	},
-
+	
+	//resets wheel for riding and other things
 	resetWheel : function()
 	{
 		this.active = false;

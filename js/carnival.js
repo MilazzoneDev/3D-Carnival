@@ -256,7 +256,7 @@ app.carnival = {
 		cylinder2.position.x = -700;
 		
 		var plane = new THREE.PlaneGeometry(40, 30, 1, 1);
-		var texture = THREE.ImageUtils.loadTexture( "textures/grass.jpg" );
+		var texture = THREE.ImageUtils.loadTexture( "textures/sign.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set( 1, 1 );

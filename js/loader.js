@@ -117,7 +117,8 @@ app.keydown = [];
 			//console.log("keyup=" + e.keyCode);
 			app.keydown[e.keyCode] = false;
 		});
-
+		
+		//resizes game
 		window.addEventListener('resize',function(e)
 		{
 			app.carnival.renderer.setSize( window.innerWidth, window.innerHeight );

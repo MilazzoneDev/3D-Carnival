@@ -29,8 +29,9 @@ app.Avatar= function()
 		THREE.GeometryUtils.merge(FullGeo,sphere2);
 		
 		this.mesh = new THREE.Mesh(FullGeo,mat);
+		this.mesh.castShadow = true;
 		
-		this.mesh.position.y = 20;
+		this.mesh.position.y = 17;
 		this.mesh.position.x = app.utilities.getRandom(-900, 900);
 		this.mesh.position.z = app.utilities.getRandom(-900, 900);
 		

@@ -19,6 +19,7 @@ app.carnival = {
 		paused: false,
 		dt: 1/60,
 		controls: undefined,
+		treeDown:false,
 
   	init : function(fov,height,width,aspect,near,far) {
   		console.log('init called');
@@ -134,14 +135,45 @@ app.carnival = {
 		//reset camera
 		if(app.keydown[82])
 		{
-			this.camera.position.y = 35;
-			this.camera.position.z = 0;
-			this.camera.position.x = -800;
+			this.camera.position.set(-800,35,0);
 
 			this.controls.lon = -30;
 			this.controls.lat = 0;
 		}
-		
+		//move light
+		if(app.keydown[73])
+		{
+			this.light.position.z+=10;
+			if(this.light.position.z > 1200)
+			{
+				this.light.position.z = 1200;
+			}
+		}
+		if(app.keydown[79])
+		{
+			this.light.position.z-=10;
+			if(this.light.position.z < -1200)
+			{
+				this.light.position.z = -1200;
+			}
+		}
+		if(app.keydown[80]&& !this.treeDown)
+		{
+			if(!(app.ferrisWheel.active || app.GameStand.active))
+			{
+				var numTrees = this.mytrees.length;
+				this.mytrees[numTrees] = new app.Tree();
+				this.mytrees[numTrees].mesh.position.x = this.camera.position.x+ ( (100)*(Math.cos((this.controls.lon)*(Math.PI/180))));
+				this.mytrees[numTrees].mesh.position.z = this.camera.position.z+ ( (100)*(Math.sin((this.controls.lon)*(Math.PI/180))));
+				
+				this.treeDown = true;
+				this.scene.add(this.mytrees[numTrees].mesh);
+			}
+		}
+		if(app.keydown[80]!=this.treeDown)
+		{
+			this.treeDown = app.keydown[80];
+		}
 	},
 
 	setupThreeJS: function(fov,height,width,aspect,near,far) {
@@ -205,10 +237,6 @@ app.carnival = {
         //this.light.castShadow = true;
         this.scene.add(this.light);
 
-        var pointLight = new THREE.PointLight(0xf9f1c2, 1, 100);
-        pointLight.position.set(1, 50, 1);
-        this.scene.add(pointLight);
-
         var ambientLight = new THREE.AmbientLight( 0x303030 ); // soft white light
         ambientLight.intensity = 0.01;
         this.scene.add( ambientLight );
@@ -248,12 +276,10 @@ app.carnival = {
 		var cylinderM = new THREE.MeshLambertMaterial({color: 0xbb2222});
 		var cylinder1 = new THREE.Mesh(cylinderG,cylinderM);
 		var cylinder2 = new THREE.Mesh(cylinderG,cylinderM);
-		cylinder1.position.y = 20;
-		cylinder1.position.z = 0;
-		cylinder1.position.x = -700;
-		cylinder2.position.y = 20;
-		cylinder2.position.z = -40;
-		cylinder2.position.x = -700;
+		cylinder1.position.set(-700,20,0);
+		cylinder1.castShadow = true;
+		cylinder2.position.set(-700,20,-40);
+		cylinder2.castShadow = true;
 		
 		var plane = new THREE.PlaneGeometry(40, 30, 1, 1);
 		var texture = THREE.ImageUtils.loadTexture( "textures/sign.jpg" );
@@ -269,13 +295,11 @@ app.carnival = {
 		var sign1 = new THREE.Mesh(plane, mat);
 		var sign2 = new THREE.Mesh(plane, mat);
 		sign1.rotation.y = -Math.PI/2;
-		sign1.position.y = 25;
-		sign1.position.z = -20;
-		sign1.position.x = -700-cylinder1.geometry.radiusTop;
+		sign1.position.set(-700-cylinder1.geometry.radiusTop,25,-20);
+		sign1.castShadow = true;
 		sign2.rotation.y = Math.PI/2;
-		sign2.position.y = 25;
-		sign2.position.z = -20;
-		sign2.position.x = -700+cylinder1.geometry.radiusTop;
+		sign2.position.set(-700+cylinder1.geometry.radiusTop,25,-20);
+		sign2.castShadow = true;
 		this.scene.add(sign1);
 		this.scene.add(sign2);
 		this.scene.add(cylinder1);

@@ -42,6 +42,12 @@ app.ferrisWheel = {
 
 	init : function(speed)
 	{
+		this.seats = undefined;
+		this.base = undefined;
+		this.all = undefined;
+		this.structure = undefined;
+		this.lights=[];
+		
 		if(speed)
 		{
 			this.speed = speed;
@@ -143,6 +149,8 @@ app.ferrisWheel = {
 		var innerBarsMesh = new THREE.Mesh(innerBars,M2);
 		
 		//add all to structure
+		radialBarsMesh.castShadow = true;
+		innerBarsMesh.castShadow = true;
 		this.structure.add(radialBarsMesh);
 		this.structure.add(innerBarsMesh);
 
@@ -150,6 +158,7 @@ app.ferrisWheel = {
 		//var allM = new THREE.MeshBasicMaterial({color:0xaaaaaa});
 		var structureM= new THREE.MeshPhongMaterial({color: 0xbbbbbb, overdraw: true});
 		var structure = new THREE.Mesh(structureG,structureM);
+		structure.castShadow = true;
 		this.structure.add(structure);
 
 		//create base
@@ -181,6 +190,7 @@ app.ferrisWheel = {
 			
 		}
 		var fullbase = new THREE.Mesh(base,baseM);
+		fullbase.castShadow = true;
 		this.base.add(fullbase);
 		
 		//create seats
@@ -197,7 +207,8 @@ app.ferrisWheel = {
 
 			seat.position.x = ( (this.PartitionLength)*(Math.cos(newAngle)));
 			seat.position.z = ( (this.PartitionLength)*(Math.sin(newAngle)));
-
+			
+			seat.castShadow = true;
 			this.seats.add(seat);
 		}
 
@@ -224,13 +235,41 @@ app.ferrisWheel = {
 		}
 		if(app.keydown[72] && !this.keydown)
 		{
-			this.resetWheel();
+			if(this.active)
+			{
+				this.resetWheel();
+			}
+			else
+			{
+				this.resetWheel();
+				this.active = true;
+			}
 		}
 		if(app.keydown[72] != this.keydown)
 		{
 			this.keydown = app.keydown[72];
 		}
-
+		
+		if(app.keydown[75])
+		{
+			this.speed-=0.001;
+			if(this.speed < 0.001)
+			{
+				this.speed = 0.001;
+			}
+			app.keydown[75] = false;
+		}
+		
+		if(app.keydown[76])
+		{
+			this.speed+=0.001;
+			if(this.speed > 0.050)
+			{
+				this.speed = 0.050;
+			}
+			app.keydown[76] = false;
+		}
+		
 		if(this.active)
 		{
 			this.structure.rotation.x += this.speed;
@@ -248,6 +287,18 @@ app.ferrisWheel = {
 			this.camera.position.y = this.structure.position.x -( (this.PartitionLength)*(Math.cos(this.structure.rotation.x)));
 			this.camera.position.z = this.structure.position.z -( (this.PartitionLength)*(Math.sin(this.structure.rotation.x)))-10;
 
+		}
+		else
+		{
+			this.structure.rotation.x += this.speed;
+
+			this.seats.rotation.x += this.speed;
+
+			var seatChildren = this.seats.children;
+			for(var k = 0; k < seatChildren.length; k++)
+			{
+				seatChildren[k].rotation.y+=this.speed;
+			}
 		}
 		
 		if(light < 0.85)
@@ -296,7 +347,7 @@ app.ferrisWheel = {
 
 	resetWheel : function()
 	{
-		this.active = !this.active;
+		this.active = false;
 		//this.controls.object.rotation = new THREE.Euler( Math.PI/2, 0, 0, 'XYZ' );
 		this.camera.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2);
 		this.controls.lon = 270;

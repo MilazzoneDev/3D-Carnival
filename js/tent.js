@@ -73,7 +73,7 @@ app.Tent = {
 
 			object.rotation.x= Math.PI/2;
 			object.rotation.y= -Math.PI;
-			object.position.z = 46;
+			object.position.z = 36;
 			object.position.x = 40;
 
 			app.Tent.pizzaObject = object;
@@ -89,13 +89,13 @@ app.Tent = {
 		var table1 = new THREE.Mesh(geo, mat);
 		var table2 = new THREE.Mesh(geo, mat);
 
-		table1.position.y = 25;
+		table1.position.y = 15;
 		table1.position.x = 210;
 		table1.position.z = -450;
 		table1.rotation.x= -Math.PI/2;
 		table1.rotation.z= -Math.PI/4;
 
-		table2.position.y = 25;
+		table2.position.y = 15;
 		table2.position.x = 125;
 		table2.position.z = -560;
 		table2.rotation.x= -Math.PI/2;

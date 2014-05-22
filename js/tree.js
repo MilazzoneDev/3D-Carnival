@@ -18,11 +18,6 @@ app.Tree = function() {
 		var treeTop4 = new THREE.Mesh(treeTopGeo,treeTopMat);
 		var treeTop5 = new THREE.Mesh(treeTopGeo,treeTopMat);
 		tree.castShadow = true;
-		treeTop1.castShadow = true;
-		treeTop2.castShadow = true;
-		treeTop3.castShadow = true;
-		treeTop4.castShadow = true;
-		treeTop5.castShadow = true;
 		
 		treeTop1.position.x = 0+(2*treeTopGeo.radius/3);
 		treeTop1.position.y = 0+treeTrunkGeo.height/3;
@@ -48,13 +43,14 @@ app.Tree = function() {
 		THREE.GeometryUtils.merge(combinedGeo, treeTop5);
 		
 		var treeTops = new THREE.Mesh(combinedGeo, treeTopMat);
+		treeTops.castShadow = true;
 		tree.add(treeTops);
 		
 		this.mesh = tree;
 		
 		// random position within the "forest" area
-		this.mesh.position.y = 20;
-		this.mesh.position.x = app.utilities.getRandom(-900, 300);
+		this.mesh.position.y = 50;
+		this.mesh.position.x = app.utilities.getRandom(-900, 900);
 		this.mesh.position.z = app.utilities.getRandom(300, 900);
     };
     

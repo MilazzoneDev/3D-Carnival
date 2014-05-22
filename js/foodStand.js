@@ -11,6 +11,7 @@ app.FoodStand = {
 	
 	foodObject: undefined,
 	foodObjectActive: false,
+	foodObjectBob: 1,
 
 	load: function(texURL, meshURL)
 	{
@@ -121,15 +122,22 @@ app.FoodStand = {
 		}
 	},
 
-/*
 	update: function()
 	{
-		if(this.mesh)
+		if(!this.foodObjectActive && this.foodObject)
 		{
-			this.mesh.position.x++;
+			this.foodObject.rotation.y += 0.02;
+			
+			this.foodObject.position.y += 0.03*this.foodObjectBob;
+			if(this.foodObject.position.y > this.object.position.y + 11)
+			{
+				this.foodObjectBob = -1;
+			}
+			else if(this.foodObject.position.y < this.object.position.y + 9)
+			{
+				this.foodObjectBob = 1;
+			}
 		}
-
-	}
-	*/
+	},
 
 };

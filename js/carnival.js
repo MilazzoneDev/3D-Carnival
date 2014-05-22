@@ -42,7 +42,9 @@ app.carnival = {
 		 }
 
 		// UPDATE
-
+		
+		
+		
 		// Update sky color
 		//this.renderer.setClearColor( 0xffffff, 1);
 		TWEEN.update();
@@ -78,7 +80,7 @@ app.carnival = {
 				app.FoodStand.foodObject.scale.y = 1.0;
 				app.FoodStand.foodObject.scale.z = 1.0;
 				
-				var pos = app.FoodStand.object.position
+				var pos = app.FoodStand.object.position;
 				
 				app.FoodStand.foodObject.position.x = pos.x + 10;
 				app.FoodStand.foodObject.position.z = pos.y + 10;
@@ -103,6 +105,43 @@ app.carnival = {
 			this.renderer.render(this.scene, this.camera);
 			this.controls.update(this.dt);
 		}
+		
+		app.FoodStand.update();
+		
+		//camera constraints
+		if(this.camera.position.y != 35)
+		{
+			this.camera.position.y = 35;
+		}
+		if(this.camera.position.x > 900)
+		{
+			this.camera.position.x = 900;
+		}
+		if(this.camera.position.x < -900)
+		{
+			this.camera.position.x = -900;
+		}
+		
+		if(this.camera.position.z > 900)
+		{
+			this.camera.position.z = 900;
+		}
+		if(this.camera.position.z < -900)
+		{
+			this.camera.position.z = -900;
+		}
+		
+		//reset camera
+		if(app.keydown[82])
+		{
+			this.camera.position.y = 35;
+			this.camera.position.z = 0;
+			this.camera.position.x = -800;
+
+			this.controls.lon = -30;
+			this.controls.lat = 0;
+		}
+		
 	},
 
 	setupThreeJS: function(fov,height,width,aspect,near,far) {
@@ -110,9 +149,9 @@ app.carnival = {
 				//this.scene.fog = new THREE.FogExp2(0x9db3b5, 0.002);
 
 				this.camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-				this.camera.position.y = 200;
+				this.camera.position.y = 35;
 				this.camera.position.z = 0;
-				this.camera.position.x = -300;
+				this.camera.position.x = -800;
 
 				this.renderer = new THREE.WebGLRenderer({antialias: true});
 				this.renderer.setSize( width, height );
@@ -122,8 +161,9 @@ app.carnival = {
 				this.controls = new THREE.FirstPersonControls(this.camera);
 
 				this.controls.movementSpeed = 100;
-				this.controls.lookSpeed = 0.2;
+				this.controls.lookSpeed = 0.18;
 				this.controls.autoForward = false;
+				this.controls.lon = -30;
 			},
 
 	setupWorld: function() {
@@ -184,7 +224,7 @@ app.carnival = {
         app.Tent.load(null, 'models/tent2.obj');
         app.Tent.loadPizza('textures/pizza.jpg', 'models/pizza_box_v01.obj');
     
-        for(var i=0; i<10; i++)
+        for(var i=0; i<2; i++)
         {
             app.BackgroundTents.load(null, 'models/tent2.obj');
         }
@@ -197,11 +237,51 @@ app.carnival = {
         }
         
         // trees
-        for(var i=0; i<10; i++)
+        for(var i=0; i<15; i++)
         {
             this.mytrees[i] = new app.Tree();
 			this.scene.add(this.mytrees[i].mesh);
         }
+		
+		//instructions
+		var cylinderG = new THREE.CylinderGeometry(3,3,40,32);
+		var cylinderM = new THREE.MeshLambertMaterial({color: 0xbb2222});
+		var cylinder1 = new THREE.Mesh(cylinderG,cylinderM);
+		var cylinder2 = new THREE.Mesh(cylinderG,cylinderM);
+		cylinder1.position.y = 20;
+		cylinder1.position.z = 0;
+		cylinder1.position.x = -700;
+		cylinder2.position.y = 20;
+		cylinder2.position.z = -40;
+		cylinder2.position.x = -700;
+		
+		var plane = new THREE.PlaneGeometry(40, 30, 1, 1);
+		var texture = THREE.ImageUtils.loadTexture( "textures/grass.jpg" );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 1, 1 );
+
+        var maxAST = this.renderer.getMaxAnisotropy();
+        texture.anisotropy = maxAST;
+
+        var mat = new THREE.MeshPhongMaterial({map:texture});
+
+		var sign1 = new THREE.Mesh(plane, mat);
+		var sign2 = new THREE.Mesh(plane, mat);
+		sign1.rotation.y = -Math.PI/2;
+		sign1.position.y = 25;
+		sign1.position.z = -20;
+		sign1.position.x = -700-cylinder1.geometry.radiusTop;
+		sign2.rotation.y = Math.PI/2;
+		sign2.position.y = 25;
+		sign2.position.z = -20;
+		sign2.position.x = -700+cylinder1.geometry.radiusTop;
+		this.scene.add(sign1);
+		this.scene.add(sign2);
+		this.scene.add(cylinder1);
+		this.scene.add(cylinder2);
+		
+		
 	},
 
   doRaycast: function(event) {

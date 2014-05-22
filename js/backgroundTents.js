@@ -30,7 +30,7 @@ app.BackgroundTents = {
 			object.position.x = 600;
 			object.position.z = app.BackgroundTents.zpos;
 			
-			app.BackgroundTents.zpos += 195;
+			app.BackgroundTents.zpos += 800;
 			app.carnival.scene.add(object);
 			
 		} );

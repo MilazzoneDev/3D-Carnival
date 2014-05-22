@@ -108,7 +108,7 @@ app.keydown = [];
 		// event listeners
 		window.addEventListener("keydown",function(e){
 			e.preventDefault();
-			//console.log("keydown=" + e.keyCode);
+			console.log("keydown=" + e.keyCode);
 			app.keydown[e.keyCode] = true;
 		});
 

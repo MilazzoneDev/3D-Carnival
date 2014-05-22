@@ -100,6 +100,17 @@ app.FoodStand = {
 	    
 	},
 	
+	resetFood: function()
+	{
+		this.foodObjectActive= false;
+		this.foodObject.position.x = this.object.position.x + 10;
+	    this.foodObject.position.y = this.object.position.y + 10;
+	    this.foodObject.position.z = this.object.position.z + 30;
+		
+		app.FoodStand.foodObject.scale.x = 1;
+		app.FoodStand.foodObject.scale.y = 1;
+		app.FoodStand.foodObject.scale.z = 1;
+	},
 	
 	doRaycast: function(raycaster) {
 		

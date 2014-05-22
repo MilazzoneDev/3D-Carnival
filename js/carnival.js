@@ -139,6 +139,9 @@ app.carnival = {
 
 			this.controls.lon = -30;
 			this.controls.lat = 0;
+			
+			app.FoodStand.resetFood();
+			app.ferrisWheel.active = false;
 		}
 		//move light
 		if(app.keydown[73])
@@ -149,6 +152,7 @@ app.carnival = {
 				this.light.position.z = 1200;
 			}
 		}
+		//move light 2
 		if(app.keydown[79])
 		{
 			this.light.position.z-=10;
@@ -157,6 +161,7 @@ app.carnival = {
 				this.light.position.z = -1200;
 			}
 		}
+		//make a tree
 		if(app.keydown[80]&& !this.treeDown)
 		{
 			if(!(app.ferrisWheel.active || app.GameStand.active))
@@ -170,6 +175,7 @@ app.carnival = {
 				this.scene.add(this.mytrees[numTrees].mesh);
 			}
 		}
+		// don't spam trees
 		if(app.keydown[80]!=this.treeDown)
 		{
 			this.treeDown = app.keydown[80];
